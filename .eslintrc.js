@@ -29,7 +29,7 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     'no-trailing-spaces': 0, // set it to 1 to get a warning.,
-    'linebreak-style': ["error", "unix"],
+    'linebreak-style': 0,
     "import/no-unresolved": "off",
     "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
     "no-underscore-dangle": 0,
