@@ -13,10 +13,12 @@
           md3>
           <v-text-field
             id="floorAreaInput"
+            v-model="fitoutPredictionParameters.floorArea"
             name="floor-area-input"
             label="Floor area (square metres)"/>
           <v-text-field
             id="floorHeightInput"
+            v-model="fitoutPredictionParameters.floorHeight"
             name="floor-height-input"
             label="Slab to slab floor height (square metres)"/>
           <v-btn 
@@ -24,8 +26,12 @@
             class="secondary"
             block 
             @click="calculateCostPrediction()">Calculate cost prediction</v-btn>
-          <div class="display-3">Cost: {{ fitoutCostPrediction.cost }}</div>
-          <div class="title">Accurate to {{ fitoutCostPrediction.predictionAccuracy }}</div>
+          <div 
+            id="displayedCostPrediction" 
+            class="display-3">Cost: {{ fitoutCostPrediction.cost }}</div>
+          <div 
+            id="displayedPredictionAccuracy" 
+            class="title">Accurate to {{ fitoutCostPrediction.predictionAccuracy }}</div>
         </v-flex>
       </v-layout>
     </v-container>
@@ -33,18 +39,19 @@
 </template>
 
 <script>
-// import FitoutCostPredictorApi from '../api/fitoutCostPredictorApi';
+import FitoutCostPredictorApi from '../api/fitoutCostPredictorApi';
 
-// const fitoutCostPredictorApi = new FitoutCostPredictorApi();
+const fitoutCostPredictorApi = new FitoutCostPredictorApi();
 
 export default {
   name: 'FitoutCostPredictor',
 
   data() {
     return {
-      fitoutCostPrediction: {
-        cost: '',
-        predictionAccuracy: '',
+      fitoutCostPrediction: '',
+      fitoutPredictionParameters: {
+        floorArea: '',
+        floorHeight: '',
       },
     };    
   },
@@ -55,6 +62,16 @@ export default {
   },
   
   methods: {
+    async calculateCostPrediction() {
+      try {
+        const response = 
+            await fitoutCostPredictorApi.getFitoutCostPrediction(this.fitoutPredictionParameters);
+            
+        this.fitoutCostPrediction = response.data;
+      } catch (error) {
+        // placeholder for error handle
+      }
+    },
   },
 };
 </script>
