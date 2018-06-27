@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import FitoutCostPredictor from '@/components/FitoutCostPredictor.vue';
+import Alert from '@/components/Alert.vue';
 
 Vue.use(Router);
 
@@ -9,7 +10,7 @@ export default new Router({
     {
       path: '/',
       name: 'FitoutCostPredictor',
-      component: FitoutCostPredictor,
+      components: { default: FitoutCostPredictor, alert: Alert },
     },
   ],
 });
