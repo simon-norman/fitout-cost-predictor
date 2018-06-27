@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import Vuelidate from 'vuelidate';
 import {
   Vuetify,
   VApp,
@@ -7,6 +8,7 @@ import {
   VList,
   VBtn,
   VIcon,
+  VTextField,
   VGrid,
   VToolbar,
   transitions,
@@ -15,7 +17,10 @@ import {
 import App from './App.vue';
 import router from './router';
 
+import '../static/assets/css/snapspace.css';
 import '../node_modules/vuetify/src/stylus/app.styl';
+
+Vue.use(Vuelidate);
 
 Vue.use(Vuetify, {
   components: {
@@ -26,6 +31,7 @@ Vue.use(Vuetify, {
     VBtn,
     VIcon,
     VGrid,
+    VTextField,
     VToolbar,
     transitions,
   },

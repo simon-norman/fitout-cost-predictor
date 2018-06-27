@@ -1,0 +1,40 @@
+@font-face {
+    font-family: 'radikal_regular';
+    src: url('../fonts/Nootype\ -\ Radikal-Regular.otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'radikal_thin';
+    src: url('../fonts/Nootype\ -\ Radikal-Thin.otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.secondary.btn {
+    border-radius: 0;
+    text-transform: none;
+    background-color: #ffcb05 !important;
+}
+
+.display-3, .secondary.btn, .title {
+    font-family: radikal_regular;
+    color: black;
+}
+
+.display-3 {
+    margin-top: 25px;
+}
+
+.title {
+    margin-top: 5px;
+}
+
+.alert {
+    z-index: 1000;
+    margin: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
