@@ -1,16 +1,29 @@
 
+import mockAxios from 'axios';
 import testUtilsWrapperFactory from './helpers/test_utils_wrapper_factory';
 import FitoutCostPredictor from '../components/FitoutCostPredictor.vue';
-import FitoutCostPredictorApi, { mockGetFitoutCostPrediction } from '../api/fitoutCostPredictorApi';
 
-jest.mock('../api/fitoutCostPredictorApi');
-
-const fitoutCostPredictorApi = new FitoutCostPredictorApi();
+jest.mock('axios');
 
 describe('FitoutCostPredictor.vue', () => {
+  const costPredictionParameters = {
+    floorArea: '100',
+    floorHeight: '1.5',
+  };
+
+  const calculatedCostPrediction = { 
+    cost: 10000, 
+    predictionAccuracy: '65%', 
+  };
+
   beforeEach(() => {
     // Clear all instances and calls to constructor and all methods:
-    mockGetFitoutCostPrediction.mockClear();
+    mockAxios.get.mockClear();
+
+    mockAxios.get.mockImplementation(() =>
+      Promise.resolve({
+        data: calculatedCostPrediction,
+      }));
   });
 
   describe('Tests loading successfully', () => {
@@ -24,10 +37,6 @@ describe('FitoutCostPredictor.vue', () => {
   describe('Predict cost', () => {
     it('should call the cost predictor API with the data (e.g. floor area) needed to make prediction', async () => {
       const wrapper = testUtilsWrapperFactory.createWrapper(FitoutCostPredictor);
-      const costPredictionParameters = {
-        floorArea: '100',
-        floorHeight: '1.5',
-      };
 
       wrapper.find('#floorAreaInput').setValue(costPredictionParameters.floorArea);
       wrapper.find('#floorHeightInput').setValue(costPredictionParameters.floorHeight);
@@ -38,30 +47,73 @@ describe('FitoutCostPredictor.vue', () => {
 
       await wrapper.vm.$nextTick();
       
-      expect(mockGetFitoutCostPrediction)
-        .toHaveBeenCalledWith(costPredictionParameters);
+      expect(mockAxios.get.mock.calls[0][1]).toEqual(costPredictionParameters);
     });
 
-    it('should display the predicted cost and accuracy', async () => {
+    it('should display the predicted cost and accuracy returned by the API', async () => {
       const wrapper = testUtilsWrapperFactory.createWrapper(FitoutCostPredictor);
 
-      const floorAreaInput = wrapper.find('#floorAreaInput');
-      floorAreaInput.setValue('100');
-      const floorHeightInput = wrapper.find('#floorHeightInput');
-      floorHeightInput.setValue('1.5');
+      wrapper.find('#floorAreaInput').setValue(costPredictionParameters.floorArea);
+      wrapper.find('#floorHeightInput').setValue(costPredictionParameters.floorHeight);
 
       await wrapper.vm.$nextTick();
 
       wrapper.find('#calculateCostPrediction').trigger('click');
 
       await wrapper.vm.$nextTick();
-
-      // get stubbed cost prediction and prediction accuracy from mocked prediction API, 
-      // in order to check that these data are displaying to the user
-      const { cost, predictionAccuracy } = fitoutCostPredictorApi.getFitoutCostPrediction().data;
       
-      expect(wrapper.find('#displayedCostPrediction').element.textContent.includes(cost)).toBeTruthy();
-      expect(wrapper.find('#displayedPredictionAccuracy').element.textContent.includes(predictionAccuracy)).toBeTruthy();
+      expect(wrapper.find('#displayedCostPrediction').element.textContent.includes(calculatedCostPrediction.cost)).toBeTruthy();
+      expect(wrapper.find('#displayedPredictionAccuracy').element.textContent.includes(calculatedCostPrediction.predictionAccuracy)).toBeTruthy();
+    });
+
+    it('should display error message and not call the prediction API if FLOOR AREA is not inputted', async () => {
+      const wrapper = testUtilsWrapperFactory.createWrapper(FitoutCostPredictor);
+      expect(wrapper.vm.$v.fitoutPredictionParameters.floorArea.$error).toBeFalse();
+
+      wrapper.find('#floorHeightInput').setValue(costPredictionParameters.floorHeight);
+
+      await wrapper.vm.$nextTick();
+
+      wrapper.find('#calculateCostPrediction').trigger('click');
+
+      await wrapper.vm.$nextTick();
+      
+      expect(mockAxios.get).not.toHaveBeenCalled();
+      expect(wrapper.vm.$v.fitoutPredictionParameters.floorArea.$error).toBeTrue();
+    });
+
+    it('should display error message and not call the prediction API if FLOOR HEIGHT is not inputted', async () => {
+      const wrapper = testUtilsWrapperFactory.createWrapper(FitoutCostPredictor);
+      expect(wrapper.vm.$v.fitoutPredictionParameters.floorArea.$error).toBeFalse();
+
+      wrapper.find('#floorAreaInput').setValue(costPredictionParameters.floorHeight);
+
+      await wrapper.vm.$nextTick();
+
+      wrapper.find('#calculateCostPrediction').trigger('click');
+
+      await wrapper.vm.$nextTick();
+      
+      expect(mockAxios.get).not.toHaveBeenCalled();
+      expect(wrapper.vm.$v.fitoutPredictionParameters.floorHeight.$error).toBeTrue();
+    });
+
+    it('should display error alert if prediction api returns an error', async () => {
+      mockAxios.get.mockImplementation(() =>
+        Promise.reject());
+      const wrapper = testUtilsWrapperFactory.createWrapper(FitoutCostPredictor);
+
+      wrapper.find('#floorAreaInput').setValue(costPredictionParameters.floorArea);
+      wrapper.find('#floorHeightInput').setValue(costPredictionParameters.floorHeight);
+  
+      await wrapper.vm.$nextTick();
+  
+      wrapper.find('#calculateCostPrediction').trigger('click');
+
+      await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('#errorMessage').hasStyle('display', 'none')).toBe(false);
     });
   });
 });
