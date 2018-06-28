@@ -54,7 +54,10 @@ export default {
 
   data() {
     return {
-      fitoutCostPrediction: '',
+      fitoutCostPrediction: {
+        cost: '',
+        predictionAccuracy: '',
+      },
       fitoutPredictionParameters: {
         floorArea: '',
         floorHeight: '',
@@ -95,6 +98,7 @@ export default {
     ]),
 
     async calculateCostPrediction() {
+      console.log('test');
       this.$v.$touch();
       if (!this.$v.$error) {
         this.$v.$reset();
