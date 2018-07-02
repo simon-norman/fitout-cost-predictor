@@ -21,8 +21,8 @@ switch (process.env.NODE_ENV) {
     env = require('../config/test.env')
     break
   // this is the new env. you can of course change the name or add even more envs
-  case 'staging':
-    env = require('../config/staging.env')
+  case 'testing':
+    env = require('../config/testing.env')
     break
   case 'production':
   default:

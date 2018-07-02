@@ -1,5 +1,7 @@
 {
   "projects": {
-    "staging": "frontend-cost-predictor-ac557"
+    "staging": "frontend-cost-predictor-ac557",
+    "testing": "testing-cost-predictor",
+    "production": "frontend-cost-predictor-ac557"
   }
 }
