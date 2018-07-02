@@ -104,6 +104,7 @@ export default {
         try {
           const response = 
             await fitoutCostPredictorApi.getFitoutCostPrediction(this.fitoutPredictionParameters);
+          console.log(response);
 
           this.fitoutCostPrediction = response.data;
         } catch (error) {

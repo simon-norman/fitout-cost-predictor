@@ -1,6 +1,7 @@
 <template>
   <v-alert 
-    v-model="errorStatus"  
+    id="errorAlert"  
+    v-model="errorStatus"
     transition="scale-transition"
     type="error"
     dismissible>

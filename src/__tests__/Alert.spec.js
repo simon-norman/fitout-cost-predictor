@@ -1,26 +1,51 @@
 
-import mockAxios from 'axios';
 import testUtilsWrapperFactory from './helpers/test_utils_wrapper_factory';
-import FitoutCostPredictor from '../components/FitoutCostPredictor.vue';
+import Alert from '../components/Alert.vue';
 
 jest.mock('axios');
 
-const createMutations = () => {
-  const mutations = {
+const createStubbedVuexMutations = () => {
+  const stubbedMutations = {
     UPDATE_ERROR_STATUS: jest.fn(() => ''),
   };
-  return mutations;
+  return stubbedMutations;
 };
 
-const createGetters = () => {
-  const getters = {
+const createStubbedVuexGetters = () => {
+  const stubbedGetters = {
     getErrorMessage: () => 'error',
     getErrorStatus: () => true,
   };
-  return getters;
+  return stubbedGetters;
 };
 
 describe('Alert.vue', () => {
   describe('Display alert', () => {
+    it('should display error alert', async () => {
+      const stubbedVuexMutations = createStubbedVuexMutations();
+      const stubbedVuexGetters = createStubbedVuexGetters();
+      const wrapper = testUtilsWrapperFactory.createWrapper(
+        Alert, undefined, 
+        stubbedVuexGetters, stubbedVuexMutations,
+      );
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('#errorAlert').hasStyle('display', 'none')).toBe(false);
+    });
+
+    it('should not display error alert', async () => {
+      const stubbedVuexMutations = createStubbedVuexMutations();
+      const stubbedVuexGetters = createStubbedVuexGetters();
+      stubbedVuexGetters.getErrorStatus = () => false;
+      const wrapper = testUtilsWrapperFactory.createWrapper(
+        Alert, undefined, 
+        stubbedVuexGetters, stubbedVuexMutations,
+      );
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('#errorAlert').hasStyle('display', 'none')).toBe(true);
+    });
   });
 });

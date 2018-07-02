@@ -13,7 +13,7 @@ window.requestAnimationFrame = jest.fn().mockImplementation(query => ({
   removeListener: jest.fn(),
 }));
 
-const createWrapper = (componentToTest, actions, getters, mutations) => {
+const createWrapper = (componentToTest, stubbedActions, stubbedGetters, stubbedMutations) => {
   const localVue = createLocalVue();
   localVue.use(Vuetify);
   localVue.use(Vuelidate);
@@ -22,9 +22,9 @@ const createWrapper = (componentToTest, actions, getters, mutations) => {
   
   const store = new Vuex.Store({
     state: {},
-    actions,
-    getters,
-    mutations,
+    actions: stubbedActions,
+    getters: stubbedGetters,
+    mutations: stubbedMutations,
   });
     
 
