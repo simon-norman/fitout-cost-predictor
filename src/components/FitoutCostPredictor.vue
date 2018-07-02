@@ -98,8 +98,6 @@ export default {
     ]),
 
     async calculateCostPrediction() {
-      console.log(process.env.COST_PREDICTOR_API);
-      console.log(process.env.NODE_ENV);
       this.$v.$touch();
       if (!this.$v.$error) {
         this.$v.$reset();

@@ -7,5 +7,5 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"testing"',
-  COST_PREDICTOR_API: '"stagingtbc"',
+  COST_PREDICTOR_API: '"https://costpredictorapi"',
 })
