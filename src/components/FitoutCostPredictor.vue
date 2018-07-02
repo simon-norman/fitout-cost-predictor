@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 import FitoutCostPredictorApi from '../api/fitoutCostPredictorApi';
 
@@ -53,11 +54,16 @@ export default {
 
   data() {
     return {
-      fitoutCostPrediction: '',
+      fitoutCostPrediction: {
+        cost: '',
+        predictionAccuracy: '',
+      },
       fitoutPredictionParameters: {
         floorArea: '',
         floorHeight: '',
       },
+      errorMessage: 'So sorry, there\'s been an error - ' +
+          'please try again later',
     };    
   },
   validations: {
@@ -86,7 +92,13 @@ export default {
   },
   
   methods: {
+    ...mapMutations([
+      'UPDATE_ERROR_MESSAGE',
+      'UPDATE_ERROR_STATUS',
+    ]),
+
     async calculateCostPrediction() {
+      console.log('test');
       this.$v.$touch();
       if (!this.$v.$error) {
         this.$v.$reset();
@@ -96,7 +108,11 @@ export default {
 
           this.fitoutCostPrediction = response.data;
         } catch (error) {
-        // placeholder for error handle
+          this.UPDATE_ERROR_MESSAGE(this.errorMessage);
+          this.UPDATE_ERROR_STATUS(true);
+          setTimeout(() => {
+            this.UPDATE_ERROR_STATUS(false);
+          }, 4000);
         }
       }
     },

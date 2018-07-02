@@ -5,6 +5,14 @@ import FitoutCostPredictor from '../components/FitoutCostPredictor.vue';
 
 jest.mock('axios');
 
+const createMutations = () => {
+  const mutations = {
+    UPDATE_ERROR_MESSAGE: jest.fn(() => ''),
+    UPDATE_ERROR_STATUS: jest.fn(() => ''),
+  };
+  return mutations;
+};
+
 describe('FitoutCostPredictor.vue', () => {
   const costPredictionParameters = {
     floorArea: '100',
@@ -28,7 +36,9 @@ describe('FitoutCostPredictor.vue', () => {
 
   describe('Tests loading successfully', () => {
     it('should have loaded a Vue instance', () => {
-      const wrapper = testUtilsWrapperFactory.createWrapper(FitoutCostPredictor);
+      const mutations = createMutations();
+      const wrapper = 
+        testUtilsWrapperFactory.createWrapper(FitoutCostPredictor, undefined, undefined, mutations);
   
       expect(wrapper.isVueInstance()).toBeTruthy();
     });
@@ -36,7 +46,9 @@ describe('FitoutCostPredictor.vue', () => {
 
   describe('Predict cost', () => {
     it('should call the cost predictor API with the data (e.g. floor area) needed to make prediction', async () => {
-      const wrapper = testUtilsWrapperFactory.createWrapper(FitoutCostPredictor);
+      const mutations = createMutations();
+      const wrapper = 
+        testUtilsWrapperFactory.createWrapper(FitoutCostPredictor, undefined, undefined, mutations);
 
       wrapper.find('#floorAreaInput').setValue(costPredictionParameters.floorArea);
       wrapper.find('#floorHeightInput').setValue(costPredictionParameters.floorHeight);
@@ -51,7 +63,9 @@ describe('FitoutCostPredictor.vue', () => {
     });
 
     it('should display the predicted cost and accuracy returned by the API', async () => {
-      const wrapper = testUtilsWrapperFactory.createWrapper(FitoutCostPredictor);
+      const mutations = createMutations();
+      const wrapper = 
+        testUtilsWrapperFactory.createWrapper(FitoutCostPredictor, undefined, undefined, mutations);
 
       wrapper.find('#floorAreaInput').setValue(costPredictionParameters.floorArea);
       wrapper.find('#floorHeightInput').setValue(costPredictionParameters.floorHeight);
@@ -67,7 +81,9 @@ describe('FitoutCostPredictor.vue', () => {
     });
 
     it('should display error message and not call the prediction API if FLOOR AREA is not inputted', async () => {
-      const wrapper = testUtilsWrapperFactory.createWrapper(FitoutCostPredictor);
+      const mutations = createMutations();
+      const wrapper = 
+        testUtilsWrapperFactory.createWrapper(FitoutCostPredictor, undefined, undefined, mutations);
       expect(wrapper.vm.$v.fitoutPredictionParameters.floorArea.$error).toBeFalse();
 
       wrapper.find('#floorHeightInput').setValue(costPredictionParameters.floorHeight);
@@ -83,7 +99,9 @@ describe('FitoutCostPredictor.vue', () => {
     });
 
     it('should display error message and not call the prediction API if FLOOR HEIGHT is not inputted', async () => {
-      const wrapper = testUtilsWrapperFactory.createWrapper(FitoutCostPredictor);
+      const mutations = createMutations();
+      const wrapper = 
+        testUtilsWrapperFactory.createWrapper(FitoutCostPredictor, undefined, undefined, mutations);
       expect(wrapper.vm.$v.fitoutPredictionParameters.floorArea.$error).toBeFalse();
 
       wrapper.find('#floorAreaInput').setValue(costPredictionParameters.floorHeight);
@@ -98,10 +116,12 @@ describe('FitoutCostPredictor.vue', () => {
       expect(wrapper.vm.$v.fitoutPredictionParameters.floorHeight.$error).toBeTrue();
     });
 
-    it('should display error alert if prediction api returns an error', async () => {
+    it('should activate alert if error from calling api, by updating vuex store', async () => {
       mockAxios.get.mockImplementation(() =>
         Promise.reject());
-      const wrapper = testUtilsWrapperFactory.createWrapper(FitoutCostPredictor);
+      const mutations = createMutations();
+      const wrapper = 
+        testUtilsWrapperFactory.createWrapper(FitoutCostPredictor, undefined, undefined, mutations);
 
       wrapper.find('#floorAreaInput').setValue(costPredictionParameters.floorArea);
       wrapper.find('#floorHeightInput').setValue(costPredictionParameters.floorHeight);
@@ -113,7 +133,8 @@ describe('FitoutCostPredictor.vue', () => {
       await wrapper.vm.$nextTick();
       await wrapper.vm.$nextTick();
 
-      expect(wrapper.find('#errorMessage').hasStyle('display', 'none')).toBe(false);
+      expect(mutations.UPDATE_ERROR_STATUS.mock.calls[0][1]).toEqual(true);
+      expect(mutations.UPDATE_ERROR_MESSAGE.mock.calls[0][1]).toEqual(wrapper.vm.errorMessage);
     });
   });
 });

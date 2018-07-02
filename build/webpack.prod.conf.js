@@ -14,7 +14,21 @@ const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const loadMinified = require('./load-minified')
 
-const env = config.build.env
+// use the env-specific config file
+let env
+switch (process.env.NODE_ENV) {
+  case 'test':
+    env = require('../config/test.env')
+    break
+  // this is the new env. you can of course change the name or add even more envs
+  case 'staging':
+    env = require('../config/staging.env')
+    break
+  case 'production':
+  default:
+    env = require('../config/prod.env')
+    break
+}
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
