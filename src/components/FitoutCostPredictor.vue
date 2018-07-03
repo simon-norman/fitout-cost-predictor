@@ -81,6 +81,10 @@ export default {
       }
       return errors;
     },
+    buildingVolume() {
+      return parseInt(this.fitoutPredictionParameters.floorArea, 10)
+      * parseInt(this.fitoutPredictionParameters.floorHeight, 10);
+    },
 
     floorHeightErrors() {
       const errors = [];
@@ -103,11 +107,14 @@ export default {
         this.$v.$reset();
         try {
           const response = 
-            await fitoutCostPredictorApi.getFitoutCostPrediction(this.fitoutPredictionParameters);
+            await fitoutCostPredictorApi.getFitoutCostPrediction({
+              volume: this.buildingVolume,
+            });
           console.log(response);
 
           this.fitoutCostPrediction = response.data;
         } catch (error) {
+          console.log(error);
           this.UPDATE_ERROR_MESSAGE(this.errorMessage);
           this.UPDATE_ERROR_STATUS(true);
           setTimeout(() => {

@@ -43,6 +43,20 @@
             ],
         },
         {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Store alerts Module Tests",
+            "program": "${workspaceRoot}\\node_modules\\jest\\bin\\jest.js",
+            "args": [
+                "-i",
+                "alerts"
+            ],
+            "internalConsoleOptions": "openOnSessionStart",
+            "outFiles": [
+                "${workspaceRoot}/dist/**/*"
+            ],
+        },
+        {
             "type": "chrome",
             "request": "launch",
             "name": "vuejs: chrome",

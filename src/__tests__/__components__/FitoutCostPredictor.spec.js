@@ -1,7 +1,7 @@
 
 import mockAxios from 'axios';
-import testUtilsWrapperFactory from './helpers/test_utils_wrapper_factory';
-import FitoutCostPredictor from '../components/FitoutCostPredictor.vue';
+import testUtilsWrapperFactory from '../__helpers__/test_utils_wrapper_factory';
+import FitoutCostPredictor from '../../components/FitoutCostPredictor.vue';
 
 jest.mock('axios');
 
