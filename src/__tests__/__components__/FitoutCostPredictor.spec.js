@@ -20,8 +20,8 @@ describe('FitoutCostPredictor.vue', () => {
   };
 
   const costPredictionApiParameters = {
-    volume: parseInt(costPredictionFormInputs.floorArea, 10) * 
-    parseInt(costPredictionFormInputs.floorHeight, 10),
+    volume: parseFloat(costPredictionFormInputs.floorArea) * 
+    parseFloat(costPredictionFormInputs.floorHeight),
   };
 
   const calculatedCostPrediction = { 

@@ -82,8 +82,8 @@ export default {
       return errors;
     },
     buildingVolume() {
-      return parseInt(this.fitoutPredictionParameters.floorArea, 10)
-      * parseInt(this.fitoutPredictionParameters.floorHeight, 10);
+      return parseFloat(this.fitoutPredictionParameters.floorArea)
+      * parseFloat(this.fitoutPredictionParameters.floorHeight);
     },
 
     floorHeightErrors() {
