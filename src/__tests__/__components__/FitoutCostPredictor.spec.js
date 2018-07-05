@@ -91,12 +91,11 @@ describe('FitoutCostPredictor.vue', () => {
       const costToTwoDecimals = Number.parseFloat(calculatedCostPrediction.cost).toFixed(2);
       const costFullyFormatted = `£${costToTwoDecimals}m`;
 
-      expect(wrapper.find('#displayedCostPrediction').element.textContent.includes(calculatedCostPrediction.cost)).toBeTruthy();
       expect(wrapper.find('#displayedCostPrediction').element.textContent.includes(costFullyFormatted)).toBeTruthy();
       expect(wrapper.find('#displayedPredictionAccuracy').element.textContent.includes(calculatedCostPrediction.predictionAccuracy)).toBeTruthy();
     });
 
-    it.only('should display the predicted cost in £k if it is less than 1 million', async () => {
+    it('should display the predicted cost in £k if it is less than 1 million', async () => {
       const stubbedVuexMutations = createStubbedVuexMutations();
       const wrapper = testUtilsWrapperFactory.createWrapper(
         FitoutCostPredictor, undefined, 
@@ -113,7 +112,6 @@ describe('FitoutCostPredictor.vue', () => {
       const costFormattedInThousands = Number.parseFloat(calculatedCostPrediction.cost) * 1000;
       const costThreeSignificantFigures = costFormattedInThousands.toPrecision(3);
       const costFullyFormatted = `£${costThreeSignificantFigures}k`;
-      debugger;
 
       expect(wrapper.find('#displayedCostPrediction').element.textContent.includes(costFullyFormatted)).toBeTruthy();
     });
@@ -144,8 +142,8 @@ describe('FitoutCostPredictor.vue', () => {
       expect(wrapper.vm.$v.fitoutPredictionParameters.floorArea.$error).toBeFalse();
       expect(wrapper.vm.$v.fitoutPredictionParameters.floorHeight.$error).toBeFalse();
 
-      wrapper.find('#floorHeightInput').setValue(0.99);
-      wrapper.find('#floorAreaInput').setValue(49);
+      wrapper.find('#floorHeightInput').setValue(1.99);
+      wrapper.find('#floorAreaInput').setValue(99.99);
       await wrapper.vm.$nextTick();
       wrapper.find('#calculateCostPrediction').trigger('click');
       await wrapper.vm.$nextTick();

@@ -72,11 +72,11 @@ export default {
     fitoutPredictionParameters: {
       floorArea: { 
         required,
-        minValue: minValue(50),
+        minValue: minValue(100),
       },
       floorHeight: { 
         required, 
-        minValue: minValue(1), 
+        minValue: minValue(2), 
       },
     },
   },
@@ -85,7 +85,7 @@ export default {
     floorAreaErrors() {
       const errors = [];
       if (this.$v.fitoutPredictionParameters.floorArea.$error) {
-        errors.push('Please provide a floor area (minimum 50 sq.m.)');
+        errors.push('Please provide a floor area (minimum 100 sq.m.)');
       }
       return errors;
     },
@@ -97,7 +97,7 @@ export default {
     floorHeightErrors() {
       const errors = [];
       if (this.$v.fitoutPredictionParameters.floorHeight.$error) {
-        errors.push('Please provide a floor height (minimum 1 m.)');
+        errors.push('Please provide a floor height (minimum 2 m.)');
       }
       return errors;
     },
@@ -141,8 +141,9 @@ export default {
             await fitoutCostPredictorApi.getFitoutCostPrediction({
               volume: this.buildingVolume,
             });
+          console.log(response);
 
-          this.fitoutCostPrediction.cost = this.formatCost(response.data.cost);
+          this.fitoutCostPrediction.cost = this.formatCost(response.data[0]);
           this.fitoutCostPrediction.predictionAccuracy = response.data.predictionAccuracy;
         } catch (error) {
           console.log(error);
