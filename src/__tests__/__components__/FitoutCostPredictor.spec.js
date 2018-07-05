@@ -14,22 +14,26 @@ const createStubbedVuexMutations = () => {
 };
 
 describe('FitoutCostPredictor.vue', () => {
-  const costPredictionFormInputs = {
-    floorArea: '100',
-    floorHeight: '1.5',
-  };
-
-  const costPredictionApiParameters = {
-    volume: parseFloat(costPredictionFormInputs.floorArea) * 
-    parseFloat(costPredictionFormInputs.floorHeight),
-  };
-
-  const calculatedCostPrediction = { 
-    cost: 10000, 
-    predictionAccuracy: '65%', 
-  };
+  let costPredictionFormInputs;
+  let calculatedCostPrediction;
+  let costPredictionApiParameters;
 
   beforeEach(() => {
+    costPredictionFormInputs = {
+      floorArea: '100',
+      floorHeight: '1.5',
+    };
+
+    calculatedCostPrediction = { 
+      cost: 1.53163151335624657245, 
+      predictionAccuracy: '65%', 
+    };
+
+    costPredictionApiParameters = {
+      volume: parseFloat(costPredictionFormInputs.floorArea) * 
+      parseFloat(costPredictionFormInputs.floorHeight),
+    };
+
     // Clear all instances and calls to constructor and all methods:
     mockAxios.post.mockClear();
 
@@ -71,7 +75,7 @@ describe('FitoutCostPredictor.vue', () => {
       expect(mockAxios.post.mock.calls[0][1]).toEqual(costPredictionApiParameters);
     });
 
-    it('should display the predicted cost and accuracy returned by the API', async () => {
+    it('should display the predicted cost and accuracy returned by the API, correctly formatted in £m', async () => {
       const stubbedVuexMutations = createStubbedVuexMutations();
       const wrapper = testUtilsWrapperFactory.createWrapper(
         FitoutCostPredictor, undefined, 
@@ -80,54 +84,74 @@ describe('FitoutCostPredictor.vue', () => {
       
       wrapper.find('#floorAreaInput').setValue(costPredictionFormInputs.floorArea);
       wrapper.find('#floorHeightInput').setValue(costPredictionFormInputs.floorHeight);
-
       await wrapper.vm.$nextTick();
-
       wrapper.find('#calculateCostPrediction').trigger('click');
-
       await wrapper.vm.$nextTick();
       
+      const costToTwoDecimals = Number.parseFloat(calculatedCostPrediction.cost).toFixed(2);
+      const costFullyFormatted = `£${costToTwoDecimals}m`;
+
       expect(wrapper.find('#displayedCostPrediction').element.textContent.includes(calculatedCostPrediction.cost)).toBeTruthy();
+      expect(wrapper.find('#displayedCostPrediction').element.textContent.includes(costFullyFormatted)).toBeTruthy();
       expect(wrapper.find('#displayedPredictionAccuracy').element.textContent.includes(calculatedCostPrediction.predictionAccuracy)).toBeTruthy();
     });
 
-    it('should display error message and not call the prediction API if FLOOR AREA is not inputted', async () => {
+    it.only('should display the predicted cost in £k if it is less than 1 million', async () => {
+      const stubbedVuexMutations = createStubbedVuexMutations();
+      const wrapper = testUtilsWrapperFactory.createWrapper(
+        FitoutCostPredictor, undefined, 
+        undefined, stubbedVuexMutations,
+      );
+      calculatedCostPrediction.cost = 0.99497789798713598718310930;
+
+      wrapper.find('#floorAreaInput').setValue(costPredictionFormInputs.floorArea);
+      wrapper.find('#floorHeightInput').setValue(costPredictionFormInputs.floorHeight);
+      await wrapper.vm.$nextTick();
+      wrapper.find('#calculateCostPrediction').trigger('click');
+      await wrapper.vm.$nextTick();
+      
+      const costFormattedInThousands = Number.parseFloat(calculatedCostPrediction.cost) * 1000;
+      const costThreeSignificantFigures = costFormattedInThousands.toPrecision(3);
+      const costFullyFormatted = `£${costThreeSignificantFigures}k`;
+      debugger;
+
+      expect(wrapper.find('#displayedCostPrediction').element.textContent.includes(costFullyFormatted)).toBeTruthy();
+    });
+
+    it('should display error message and not call api if FLOOR AREA or FLOOR HEIGHT are not inputted', async () => {
       const stubbedVuexMutations = createStubbedVuexMutations();
       const wrapper = testUtilsWrapperFactory.createWrapper(
         FitoutCostPredictor, undefined, 
         undefined, stubbedVuexMutations,
       );
       expect(wrapper.vm.$v.fitoutPredictionParameters.floorArea.$error).toBeFalse();
-
-      wrapper.find('#floorHeightInput').setValue(costPredictionFormInputs.floorHeight);
-
-      await wrapper.vm.$nextTick();
+      expect(wrapper.vm.$v.fitoutPredictionParameters.floorHeight.$error).toBeFalse();
 
       wrapper.find('#calculateCostPrediction').trigger('click');
-
       await wrapper.vm.$nextTick();
       
       expect(mockAxios.post).not.toHaveBeenCalled();
       expect(wrapper.vm.$v.fitoutPredictionParameters.floorArea.$error).toBeTrue();
+      expect(wrapper.vm.$v.fitoutPredictionParameters.floorHeight.$error).toBeTrue();
     });
 
-    it('should display error message and not call the prediction API if FLOOR HEIGHT is not inputted', async () => {
+    it('should display error message and not call api if FLOOR AREA or FLOOR HEIGHT are below minimum values', async () => {
       const stubbedVuexMutations = createStubbedVuexMutations();
       const wrapper = testUtilsWrapperFactory.createWrapper(
         FitoutCostPredictor, undefined, 
         undefined, stubbedVuexMutations,
-      ); 
+      );
       expect(wrapper.vm.$v.fitoutPredictionParameters.floorArea.$error).toBeFalse();
+      expect(wrapper.vm.$v.fitoutPredictionParameters.floorHeight.$error).toBeFalse();
 
-      wrapper.find('#floorAreaInput').setValue(costPredictionFormInputs.floorHeight);
-
+      wrapper.find('#floorHeightInput').setValue(0.99);
+      wrapper.find('#floorAreaInput').setValue(49);
       await wrapper.vm.$nextTick();
-
       wrapper.find('#calculateCostPrediction').trigger('click');
-
       await wrapper.vm.$nextTick();
       
       expect(mockAxios.post).not.toHaveBeenCalled();
+      expect(wrapper.vm.$v.fitoutPredictionParameters.floorArea.$error).toBeTrue();
       expect(wrapper.vm.$v.fitoutPredictionParameters.floorHeight.$error).toBeTrue();
     });
 

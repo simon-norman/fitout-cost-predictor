@@ -31,7 +31,7 @@ describe('Alert.vue', () => {
 
       await wrapper.vm.$nextTick();
 
-      expect(wrapper.find('#errorAlert').hasStyle('display', 'none')).toBe(false);
+      expect(wrapper.find('#errorAlert').element.style.display).toBe('');
     });
 
     it('should not display error alert', async () => {
@@ -45,7 +45,7 @@ describe('Alert.vue', () => {
 
       await wrapper.vm.$nextTick();
 
-      expect(wrapper.find('#errorAlert').hasStyle('display', 'none')).toBe(true);
+      expect(wrapper.find('#errorAlert').element.style.display).toBe('none');
     });
   });
 });

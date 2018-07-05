@@ -4,7 +4,7 @@ export default class FitoutCostPredictorApi extends Api {
   constructor() {
     super({ baseURL: process.env.COST_PREDICTOR_API });
     
-    this.fitoutCostPredictionPath = '/api';
+    this.fitoutCostPredictionPath = '/fitOutCostPrediction';
   }
 
   getFitoutCostPrediction(params) {
