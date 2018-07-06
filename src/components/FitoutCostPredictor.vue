@@ -110,7 +110,7 @@ export default {
     ]),
 
     formatCost(predictedCost) {
-      if (predictedCost < 0.995) {
+      if (predictedCost < 0.999) {
         return this.formatCostInThousands(predictedCost);
       } 
       return this.formatCostInMillions(predictedCost);
@@ -142,7 +142,9 @@ export default {
               volume: this.buildingVolume,
             });
 
-          this.fitoutCostPrediction.cost = this.formatCost(response.data.cost);
+          console.log(response);
+          console.log('nada');
+          this.fitoutCostPrediction.cost = this.formatCost(response.data[0]);
           this.fitoutCostPrediction.predictionAccuracy = response.data.predictionAccuracy;
         } catch (error) {
           console.log(error);
