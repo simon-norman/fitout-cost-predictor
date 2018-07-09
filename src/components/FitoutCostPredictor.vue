@@ -111,7 +111,7 @@ export default {
     ]),
 
     formatCost(predictedCost) {
-      if (predictedCost < 0.995) {
+      if (predictedCost < 0.999) {
         return this.formatCostInThousands(predictedCost);
       } 
       return this.formatCostInMillions(predictedCost);
