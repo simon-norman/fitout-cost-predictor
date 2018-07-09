@@ -37,7 +37,7 @@
             class="display-3">Cost:  {{ fitoutCostPrediction.cost }}</div>
           <div 
             id="displayedPredictionAccuracy" 
-            class="title">Accurate to {{ fitoutCostPrediction.predictionAccuracy }}</div>
+            class="title">Predictions currently accurate to 60%</div>
         </v-flex>
       </v-layout>
     </v-container>
@@ -58,11 +58,12 @@ export default {
     return {
       fitoutCostPrediction: {
         cost: '',
-        predictionAccuracy: '',
       },
       fitoutPredictionParameters: {
         floorArea: '',
         floorHeight: '',
+        catAIncluded: false,
+        catBIncluded: false,
       },
       errorMessage: 'So sorry, there\'s been an error - ' +
           'please try again later',
@@ -142,9 +143,8 @@ export default {
               volume: this.buildingVolume,
             });
           console.log(response);
-
+          console.log('test');
           this.fitoutCostPrediction.cost = this.formatCost(response.data[0]);
-          this.fitoutCostPrediction.predictionAccuracy = response.data.predictionAccuracy;
         } catch (error) {
           console.log(error);
           this.handleError();

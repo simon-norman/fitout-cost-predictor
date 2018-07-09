@@ -117,7 +117,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       cacheId: 'frontend-cost-predictor',
       filename: 'service-worker.js',
       staticFileGlobs: ['dist/**/*.{js,html,css}'],
-      minify: true,
+      minify: true, 
       stripPrefix: 'dist/'
     })
   ]
