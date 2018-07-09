@@ -14,14 +14,15 @@ const createStubbedVuexMutations = () => {
 };
 
 describe('FitoutCostPredictor.vue', () => {
-  let costPredictionFormInputs;
+  let costPredictionFloorInputs;
   let calculatedCostPrediction;
   let costPredictionApiParameters;
+  let vueTestWrapperElements;
 
   beforeEach(() => {
-    costPredictionFormInputs = {
+    costPredictionFloorInputs = {
       floorArea: '100',
-      floorHeight: '1.5',
+      floorHeight: '2',
     };
 
     calculatedCostPrediction = { 
@@ -30,8 +31,23 @@ describe('FitoutCostPredictor.vue', () => {
     };
 
     costPredictionApiParameters = {
-      volume: parseFloat(costPredictionFormInputs.floorArea) * 
-      parseFloat(costPredictionFormInputs.floorHeight),
+      volume: parseFloat(costPredictionFloorInputs.floorArea) * 
+      parseFloat(costPredictionFloorInputs.floorHeight),
+      isCatAIncluded: true,
+      isCatBIncluded: true,
+    };
+
+    vueTestWrapperElements = {
+      componentToTest: FitoutCostPredictor,
+      componentTestData: {
+        fitoutPredictionParameters: {
+          isCatAIncluded: true,
+          isCatBIncluded: true,
+        },
+      },
+      vuexStoreStubs: { 
+        stubbedVuexMutations: '', 
+      },
     };
 
     // Clear all instances and calls to constructor and all methods:
@@ -45,32 +61,30 @@ describe('FitoutCostPredictor.vue', () => {
 
   describe('Tests loading successfully', () => {
     it('should have loaded a Vue instance', () => {
-      const stubbedVuexMutations = createStubbedVuexMutations();
-      const wrapper = testUtilsWrapperFactory.createWrapper(
-        FitoutCostPredictor, undefined, 
-        undefined, stubbedVuexMutations,
-      );
+      vueTestWrapperElements.vuexStoreStubs.stubbedVuexMutations = createStubbedVuexMutations();
+      const wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
   
       expect(wrapper.isVueInstance()).toBeTruthy();
     });
   });
 
   describe('Predict cost', () => {
-    it('should call the cost predictor API with the data (e.g. floor area) needed to make prediction', async () => {
-      const stubbedVuexMutations = createStubbedVuexMutations();
-      const wrapper = testUtilsWrapperFactory.createWrapper(
-        FitoutCostPredictor, undefined, 
-        undefined, stubbedVuexMutations,
-      );
+    it.only('should call the cost predictor API with the data (e.g. floor area) needed to make prediction', async () => {
+      vueTestWrapperElements.vuexStoreStubs.stubbedVuexMutations = createStubbedVuexMutations();
+      const wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
 
-      wrapper.find('#floorAreaInput').setValue(costPredictionFormInputs.floorArea);
-      wrapper.find('#floorHeightInput').setValue(costPredictionFormInputs.floorHeight);
+      wrapper.find('#floorAreaInput').setValue(costPredictionFloorInputs.floorArea);
+      wrapper.find('#floorHeightInput').setValue(costPredictionFloorInputs.floorHeight);
+      wrapper.vm.fitoutPredictionParameters.isCatAIncluded = true;
+      wrapper.vm.fitoutPredictionParameters.isCatBIncluded = true;
 
+      await wrapper.vm.$nextTick();
       await wrapper.vm.$nextTick();
 
       wrapper.find('#calculateCostPrediction').trigger('click');
 
       await wrapper.vm.$nextTick();
+      debugger;
       
       expect(mockAxios.post.mock.calls[0][1]).toEqual(costPredictionApiParameters);
     });
@@ -82,8 +96,8 @@ describe('FitoutCostPredictor.vue', () => {
         undefined, stubbedVuexMutations,
       );
       
-      wrapper.find('#floorAreaInput').setValue(costPredictionFormInputs.floorArea);
-      wrapper.find('#floorHeightInput').setValue(costPredictionFormInputs.floorHeight);
+      wrapper.find('#floorAreaInput').setValue(costPredictionFloorInputs.floorArea);
+      wrapper.find('#floorHeightInput').setValue(costPredictionFloorInputs.floorHeight);
       await wrapper.vm.$nextTick();
       wrapper.find('#calculateCostPrediction').trigger('click');
       await wrapper.vm.$nextTick();
@@ -103,8 +117,8 @@ describe('FitoutCostPredictor.vue', () => {
       );
       calculatedCostPrediction.cost = 0.99497789798713598718310930;
 
-      wrapper.find('#floorAreaInput').setValue(costPredictionFormInputs.floorArea);
-      wrapper.find('#floorHeightInput').setValue(costPredictionFormInputs.floorHeight);
+      wrapper.find('#floorAreaInput').setValue(costPredictionFloorInputs.floorArea);
+      wrapper.find('#floorHeightInput').setValue(costPredictionFloorInputs.floorHeight);
       await wrapper.vm.$nextTick();
       wrapper.find('#calculateCostPrediction').trigger('click');
       await wrapper.vm.$nextTick();
@@ -153,6 +167,26 @@ describe('FitoutCostPredictor.vue', () => {
       expect(wrapper.vm.$v.fitoutPredictionParameters.floorHeight.$error).toBeTrue();
     });
 
+    it('should display error message and not call api if BOTH Cat A and Cat B options are NOT selected', async () => {
+      const stubbedVuexMutations = createStubbedVuexMutations();
+      const wrapper = testUtilsWrapperFactory.createWrapper(
+        FitoutCostPredictor, undefined, 
+        undefined, stubbedVuexMutations,
+      );
+      expect(wrapper.vm.$v.fitoutPredictionParameters.isCatAIncluded.$error).toBeFalse();
+      expect(wrapper.vm.$v.fitoutPredictionParameters.isCatBIncluded.$error).toBeFalse();
+
+      wrapper.find('#isCatAIncluded').setValue(1.99);
+      wrapper.find('#isCatBIncluded').setValue(99.99);
+      await wrapper.vm.$nextTick();
+      wrapper.find('#calculateCostPrediction').trigger('click');
+      await wrapper.vm.$nextTick();
+      
+      expect(mockAxios.post).not.toHaveBeenCalled();
+      expect(wrapper.vm.$v.fitoutPredictionParameters.floorArea.$error).toBeTrue();
+      expect(wrapper.vm.$v.fitoutPredictionParameters.floorHeight.$error).toBeTrue();
+    });
+
     it('should activate alert if error from calling api, by updating vuex store', async () => {
       mockAxios.post.mockImplementation(() =>
         Promise.reject());
@@ -162,8 +196,8 @@ describe('FitoutCostPredictor.vue', () => {
         undefined, stubbedVuexMutations,
       );
 
-      wrapper.find('#floorAreaInput').setValue(costPredictionFormInputs.floorArea);
-      wrapper.find('#floorHeightInput').setValue(costPredictionFormInputs.floorHeight);
+      wrapper.find('#floorAreaInput').setValue(costPredictionFloorInputs.floorArea);
+      wrapper.find('#floorHeightInput').setValue(costPredictionFloorInputs.floorHeight);
   
       await wrapper.vm.$nextTick();
   

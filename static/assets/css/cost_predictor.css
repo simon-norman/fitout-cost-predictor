@@ -12,23 +12,28 @@
     font-style: normal;
 }
 
-.secondary.btn {
+.secondary.v-btn {
     border-radius: 0;
     text-transform: none;
     background-color: #ffcb05 !important;
 }
 
-.display-3, .secondary.btn, .title {
-    font-family: radikal_regular;
+.large-title, .secondary.v-btn, .small-title, .v-label {
+    font-family: radikal_regular !important;
+}
+
+.large-title, .secondary.v-btn, .small-title {
     color: black;
 }
 
-.display-3 {
+.large-title {
     margin-top: 25px;
+    font-size: 5rem;
 }
 
-.title {
+.small-title {
     margin-top: 5px;
+    font-size: 1.5rem;
 }
 
 .alert {

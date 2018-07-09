@@ -5,6 +5,7 @@ import {
   VApp,
   VAlert,
   VNavigationDrawer,
+  VCheckbox,
   VFooter,
   VList,
   VBtn,
@@ -19,7 +20,7 @@ import App from './App.vue';
 import router from './router';
 import { store } from './store/store';
 
-import '../static/assets/css/snapspace.css';
+import '../static/assets/css/cost_predictor.css';
 import '../node_modules/vuetify/src/stylus/app.styl';
 
 Vue.use(Vuelidate);
@@ -33,6 +34,7 @@ Vue.use(Vuetify, {
     VList,
     VBtn,
     VIcon,
+    VCheckbox,
     VGrid,
     VTextField,
     VToolbar,

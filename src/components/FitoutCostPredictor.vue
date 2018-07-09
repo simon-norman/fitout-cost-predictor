@@ -27,6 +27,16 @@
             type="number"
             name="floor-height-input"
             label="Slab to slab floor height (m.)"/>
+          <v-checkbox
+            id="isCatAIncludedInput"
+            :label="`Will this project involve CAT A work?`"
+            v-model="fitoutPredictionParameters.isCatAIncluded"
+          />
+          <v-checkbox
+            id="isCatBIncludedInput"
+            :label="`Will this project involve CAT B work?`"
+            v-model="fitoutPredictionParameters.isCatBIncluded"
+          />
           <v-btn 
             id="calculateCostPrediction"
             class="secondary"
@@ -34,10 +44,10 @@
             @click="calculateCostPrediction()">Calculate cost prediction</v-btn>
           <div 
             id="displayedCostPrediction" 
-            class="display-3">Cost:  {{ fitoutCostPrediction.cost }}</div>
+            class="large-title">Cost:  {{ fitoutCostPrediction.cost }}</div>
           <div 
             id="displayedPredictionAccuracy" 
-            class="title">Predictions currently accurate to 60%</div>
+            class="small-title">Predictions currently accurate to 65%</div>
         </v-flex>
       </v-layout>
     </v-container>
@@ -62,8 +72,8 @@ export default {
       fitoutPredictionParameters: {
         floorArea: '',
         floorHeight: '',
-        catAIncluded: false,
-        catBIncluded: false,
+        isCatAIncluded: false,
+        isCatBIncluded: false,
       },
       errorMessage: 'So sorry, there\'s been an error - ' +
           'please try again later',
@@ -141,9 +151,10 @@ export default {
           const response = 
             await fitoutCostPredictorApi.getFitoutCostPrediction({
               volume: this.buildingVolume,
+              isCatAIncluded: this.isCatAIncluded,
+              isCatBIncluded: this.isCatBIncluded,
             });
           console.log(response);
-          console.log('test');
           this.fitoutCostPrediction.cost = this.formatCost(response.data[0]);
         } catch (error) {
           console.log(error);
