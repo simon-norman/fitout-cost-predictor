@@ -20,14 +20,21 @@ const createStubbedVuexGetters = () => {
 };
 
 describe('Alert.vue', () => {
+  let vueTestWrapperElements;
+
+  beforeEach(() => {
+    vueTestWrapperElements = {
+      componentToTest: Alert,
+      vuexStoreStubs: { 
+        stubbedVuexGetters: createStubbedVuexGetters(), 
+        stubbedVuexMutations: createStubbedVuexMutations(), 
+      },
+    };
+  });
+
   describe('Display alert', () => {
     it('should display error alert', async () => {
-      const stubbedVuexMutations = createStubbedVuexMutations();
-      const stubbedVuexGetters = createStubbedVuexGetters();
-      const wrapper = testUtilsWrapperFactory.createWrapper(
-        Alert, undefined, 
-        stubbedVuexGetters, stubbedVuexMutations,
-      );
+      const wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
 
       await wrapper.vm.$nextTick();
 
@@ -35,16 +42,10 @@ describe('Alert.vue', () => {
     });
 
     it('should not display error alert', async () => {
-      const stubbedVuexMutations = createStubbedVuexMutations();
-      const stubbedVuexGetters = createStubbedVuexGetters();
-      stubbedVuexGetters.getErrorStatus = () => false;
-      const wrapper = testUtilsWrapperFactory.createWrapper(
-        Alert, undefined, 
-        stubbedVuexGetters, stubbedVuexMutations,
-      );
+      vueTestWrapperElements.vuexStoreStubs.stubbedVuexGetters.getErrorStatus = () => false;
+      const wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
 
       await wrapper.vm.$nextTick();
-
       expect(wrapper.find('#errorAlert').element.style.display).toBe('none');
     });
   });

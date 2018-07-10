@@ -31,11 +31,14 @@
             id="isCatAIncludedInput"
             :label="`Will this project involve CAT A work?`"
             v-model="fitoutPredictionParameters.isCatAIncluded"
+            :error="catAcatBErrorsWithoutMessage"
+            hide-details
           />
           <v-checkbox
             id="isCatBIncludedInput"
             :label="`Will this project involve CAT B work?`"
             v-model="fitoutPredictionParameters.isCatBIncluded"
+            :error-messages="catAcatBErrorsWithMessage"
           />
           <v-btn 
             id="calculateCostPrediction"
@@ -89,6 +92,17 @@ export default {
         required, 
         minValue: minValue(2), 
       },
+      isCatAIncluded: {
+        required(v) {
+          return this.fitoutPredictionParameters.isCatBIncluded || required(v);
+        },
+      },
+      isCatBIncluded: {
+        required(v) {
+          return this.fitoutPredictionParameters.isCatAIncluded || required(v);
+        },
+      },
+      isEitherCatAOrBIncluded: ['fitoutPredictionParameters.isCatAIncluded', 'fitoutPredictionParameters.isCatBIncluded'],
     },
   },
 
@@ -100,6 +114,7 @@ export default {
       }
       return errors;
     },
+    
     buildingVolume() {
       return parseFloat(this.fitoutPredictionParameters.floorArea)
       * parseFloat(this.fitoutPredictionParameters.floorHeight);
@@ -109,6 +124,21 @@ export default {
       const errors = [];
       if (this.$v.fitoutPredictionParameters.floorHeight.$error) {
         errors.push('Please provide a floor height (minimum 2 m.)');
+      }
+      return errors;
+    },
+
+    catAcatBErrorsWithoutMessage() {
+      if (this.$v.fitoutPredictionParameters.isEitherCatAOrBIncluded.$error) {
+        return true;
+      }
+      return false;
+    },
+
+    catAcatBErrorsWithMessage() {
+      const errors = [];
+      if (this.$v.fitoutPredictionParameters.isEitherCatAOrBIncluded.$error) {
+        errors.push('Please select at least one CAT A / CAT B option');
       }
       return errors;
     },
@@ -151,8 +181,8 @@ export default {
           const response = 
             await fitoutCostPredictorApi.getFitoutCostPrediction({
               volume: this.buildingVolume,
-              isCatAIncluded: this.isCatAIncluded,
-              isCatBIncluded: this.isCatBIncluded,
+              isCatAIncluded: this.fitoutPredictionParameters.isCatAIncluded,
+              isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
             });
           console.log(response);
           this.fitoutCostPrediction.cost = this.formatCost(response.data[0]);

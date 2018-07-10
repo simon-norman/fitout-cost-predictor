@@ -16,7 +16,9 @@ window.requestAnimationFrame = jest.fn().mockImplementation(query => ({
 const createVuexStore = (vuexStoreStubs) => {  
   const store = new Vuex.Store({
     state: {},
-    vuexStoreStubs,
+    mutations: vuexStoreStubs.stubbedVuexMutations, 
+    actions: vuexStoreStubs.stubbedVuexActions,
+    getters: vuexStoreStubs.stubbedVuexGetters,
   });
     
   return store;
@@ -32,16 +34,15 @@ const createdConfiguredLocalVue = () => {
 
 const createWrapper = (vueTestWrapperElements) => {
   const configuredLocalVue = createdConfiguredLocalVue();
-  
-  const store = createVuexStore(vueTestWrapperElements.vuexStoreStubs);    
-
+  const store = createVuexStore(vueTestWrapperElements.vuexStoreStubs);
   const wrapper = mount(vueTestWrapperElements.componentToTest, {
     store,
-    configuredLocalVue,
+    localVue: configuredLocalVue,
   });
+  if (vueTestWrapperElements.componentTestData) {
+    wrapper.setData(vueTestWrapperElements.componentTestData);
+  }
 
-  wrapper.setData(vueTestWrapperElements.componentTestData);
-    
   return wrapper;
 };
 
