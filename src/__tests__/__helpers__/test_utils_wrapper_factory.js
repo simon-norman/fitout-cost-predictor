@@ -20,7 +20,6 @@ const createVuexStore = (vuexStoreStubs) => {
     actions: vuexStoreStubs.stubbedVuexActions,
     getters: vuexStoreStubs.stubbedVuexGetters,
   });
-    
   return store;
 };
 
@@ -42,7 +41,6 @@ const createWrapper = (vueTestWrapperElements) => {
   if (vueTestWrapperElements.componentTestData) {
     wrapper.setData(vueTestWrapperElements.componentTestData);
   }
-
   return wrapper;
 };
 

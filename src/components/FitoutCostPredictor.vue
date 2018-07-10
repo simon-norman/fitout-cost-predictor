@@ -180,7 +180,7 @@ export default {
         try {
           const response = 
             await fitoutCostPredictorApi.getFitoutCostPrediction({
-              volume: this.buildingVolume,
+              buildingVolume: this.buildingVolume,
               isCatAIncluded: this.fitoutPredictionParameters.isCatAIncluded,
               isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
             });

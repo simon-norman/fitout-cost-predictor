@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuelidate from 'vuelidate';
+import VueAnalytics from 'vue-analytics';
 import {
   Vuetify,
   VApp,
@@ -24,6 +25,17 @@ import '../static/assets/css/cost_predictor.css';
 import '../node_modules/vuetify/src/stylus/app.styl';
 
 Vue.use(Vuelidate);
+
+const isProduction = process.env.NODE.ENV === 'Production';
+
+Vue.use(VueAnalytics, {
+  id: 122096477,
+  router,
+  debug: {
+    enabled: !isProduction,
+    sendHitTask: isProduction,
+  },
+});
 
 Vue.use(Vuetify, {
   components: {
