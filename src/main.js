@@ -26,7 +26,7 @@ import '../node_modules/vuetify/src/stylus/app.styl';
 
 Vue.use(Vuelidate);
 
-const isProduction = process.env.NODE.ENV === 'Production';
+const isProduction = process.env.NODE_ENV === 'Production';
 
 Vue.use(VueAnalytics, {
   id: 122096477,
