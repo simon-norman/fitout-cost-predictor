@@ -19,14 +19,14 @@
             :error-messages="floorAreaErrors"
             type="number"
             name="floor-area-input"
-            label="Floor area (sq. m.)"/>
+            label="Floor area (sq. m. - minimum 1000 sq. m.)"/>
           <v-text-field
             id="floorHeightInput"
             v-model="fitoutPredictionParameters.floorHeight"
             :error-messages="floorHeightErrors"
             type="number"
             name="floor-height-input"
-            label="Slab to slab floor height (m.)"/>
+            label="Slab to slab floor height (m. - minimum 2.5m)"/>
           <v-checkbox
             id="isCatAIncludedInput"
             :label="`Will this project involve CAT A work?`"
@@ -86,11 +86,11 @@ export default {
     fitoutPredictionParameters: {
       floorArea: { 
         required,
-        minValue: minValue(100),
+        minValue: minValue(1000),
       },
       floorHeight: { 
         required, 
-        minValue: minValue(2), 
+        minValue: minValue(2.5), 
       },
       isCatAIncluded: {
         required(v) {
@@ -110,7 +110,7 @@ export default {
     floorAreaErrors() {
       const errors = [];
       if (this.$v.fitoutPredictionParameters.floorArea.$error) {
-        errors.push('Please provide a floor area (minimum 100 sq.m.)');
+        errors.push('Please provide a floor area (minimum 1000 sq.m.)');
       }
       return errors;
     },
@@ -184,25 +184,24 @@ export default {
 
     calculateCostPrediction() {
       if (this.arePredictionParametersValid()) {
-        try {
-          const cost = this.getPredictionFromApi();
-          this.fitoutCostPrediction.cost = this.formatCost(cost);
-        } catch (error) {
-          console.log(error);
-          this.handleError();
-        }
+        this.getPredictionFromApi();
       }
     },
 
     async getPredictionFromApi() {
-      const response = 
+      try {
+        const response = 
             await fitoutCostPredictorApi.getFitoutCostPrediction({
               buildingVolume: this.buildingVolume,
               isCatAIncluded: this.fitoutPredictionParameters.isCatAIncluded,
               isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
             });
-      console.log(response);
-      return response.data.cost;
+        console.log(response);
+        this.fitoutCostPrediction.cost = this.formatCost(response.data.cost);
+      } catch (error) {
+        console.log(error);
+        this.handleError(error);
+      }
     },
   },
 };

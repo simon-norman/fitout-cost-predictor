@@ -18,12 +18,17 @@
     background-color: #ffcb05 !important;
 }
 
-.large-title, .secondary.v-btn, .small-title, .v-label {
+.large-title, .secondary.v-btn, .small-title, .v-label, .v-toolbar__title {
     font-family: radikal_regular !important;
 }
 
-.large-title, .secondary.v-btn, .small-title {
+.large-title, .secondary.v-btn, .small-title, .v-toolbar__title {
     color: black;
+}
+
+.v-toolbar__title {
+    font-size: 2rem;
+    margin-bottom: 3px;
 }
 
 .large-title {
@@ -42,4 +47,8 @@
     position: fixed;
     top: 0;
     width: 100%;
+}
+
+#logo {
+    width: 164px;
 }

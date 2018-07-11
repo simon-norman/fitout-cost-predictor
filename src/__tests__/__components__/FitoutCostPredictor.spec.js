@@ -21,8 +21,8 @@ describe('FitoutCostPredictor.vue', () => {
 
   beforeEach(() => {
     costPredictionFloorInputs = {
-      floorArea: '100',
-      floorHeight: '2',
+      floorArea: '1000',
+      floorHeight: '2.5',
     };
 
     costPredictionApiParameters = {
@@ -93,7 +93,6 @@ describe('FitoutCostPredictor.vue', () => {
       const costFullyFormatted = `£${costToTwoDecimals}m`;
 
       expect(wrapper.find('#displayedCostPrediction').element.textContent.includes(costFullyFormatted)).toBeTruthy();
-      expect(wrapper.find('#displayedPredictionAccuracy').element.textContent.includes(calculatedCostPrediction.predictionAccuracy)).toBeTruthy();
     });
 
     it('should display the predicted cost in £k if it is less than 1 million', async () => {
@@ -131,8 +130,8 @@ describe('FitoutCostPredictor.vue', () => {
       expect(wrapper.vm.$v.fitoutPredictionParameters.floorArea.$error).toBeFalse();
       expect(wrapper.vm.$v.fitoutPredictionParameters.floorHeight.$error).toBeFalse();
 
-      wrapper.find('#floorHeightInput').setValue(1.99);
-      wrapper.find('#floorAreaInput').setValue(99.99);
+      wrapper.find('#floorHeightInput').setValue(2.49);
+      wrapper.find('#floorAreaInput').setValue(999.99);
       await wrapper.vm.$nextTick();
       wrapper.find('#calculateCostPrediction').trigger('click');
       await wrapper.vm.$nextTick();
