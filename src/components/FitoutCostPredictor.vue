@@ -50,7 +50,7 @@
             class="large-title">Cost:  {{ fitoutCostPrediction.cost }}</div>
           <div 
             id="displayedPredictionAccuracy" 
-            class="small-title">Predictions currently accurate to 65%</div>
+            class="small-title">Predictions currently accurate to 80%</div>
         </v-flex>
       </v-layout>
     </v-container>
@@ -185,7 +185,7 @@ export default {
               isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
             });
           console.log(response);
-          this.fitoutCostPrediction.cost = this.formatCost(response.data[0]);
+          this.fitoutCostPrediction.cost = this.formatCost(response.data.cost);
         } catch (error) {
           console.log(error);
           this.handleError();

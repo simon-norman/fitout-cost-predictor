@@ -26,7 +26,7 @@ describe('FitoutCostPredictor.vue', () => {
     };
 
     costPredictionApiParameters = {
-      volume: parseFloat(costPredictionFloorInputs.floorArea) * 
+      buildingVolume: parseFloat(costPredictionFloorInputs.floorArea) * 
       parseFloat(costPredictionFloorInputs.floorHeight),
       isCatAIncluded: true,
       isCatBIncluded: true,
