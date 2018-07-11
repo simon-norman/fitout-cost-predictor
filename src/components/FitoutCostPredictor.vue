@@ -173,24 +173,36 @@ export default {
       this.UPDATE_ERROR_STATUS(true);
     },
 
-    async calculateCostPrediction() {
+    arePredictionParametersValid() {
       this.$v.$touch();
       if (!this.$v.$error) {
         this.$v.$reset();
+        return true;
+      }
+      return false;
+    },
+
+    calculateCostPrediction() {
+      if (this.arePredictionParametersValid()) {
         try {
-          const response = 
-            await fitoutCostPredictorApi.getFitoutCostPrediction({
-              buildingVolume: this.buildingVolume,
-              isCatAIncluded: this.fitoutPredictionParameters.isCatAIncluded,
-              isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
-            });
-          console.log(response);
-          this.fitoutCostPrediction.cost = this.formatCost(response.data.cost);
+          const cost = this.getPredictionFromApi();
+          this.fitoutCostPrediction.cost = this.formatCost(cost);
         } catch (error) {
           console.log(error);
           this.handleError();
         }
       }
+    },
+
+    async getPredictionFromApi() {
+      const response = 
+            await fitoutCostPredictorApi.getFitoutCostPrediction({
+              buildingVolume: this.buildingVolume,
+              isCatAIncluded: this.fitoutPredictionParameters.isCatAIncluded,
+              isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
+            });
+      console.log(response);
+      return response.data.cost;
     },
   },
 };
