@@ -1,51 +1,23 @@
-@font-face {
-    font-family: 'radikal_regular';
-    src: url('../fonts/Nootype\ -\ Radikal-Regular.otf');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'radikal_thin';
-    src: url('../fonts/Nootype\ -\ Radikal-Thin.otf');
-    font-weight: normal;
-    font-style: normal;
-}
-
-.secondary.v-btn {
+.v-btn {
     border-radius: 0;
     text-transform: none;
     background-color: #ffcb05 !important;
+    font-size: 16px !important;
 }
 
 .application-background {
     background: white !important;
 }
 
-.large-title, .secondary.v-btn, .small-title, .v-label, .v-toolbar__title {
-    font-family: radikal_regular !important;
-}
-
-.large-title, .secondary.v-btn, .small-title, .v-toolbar__title {
-    color: black;
-}
-
-.v-toolbar__title {
-    font-size: 2rem;
-    margin-bottom: 3px;
-}
-
-.large-title {
+#displayedCostPrediction {
     margin-top: 25px;
-    font-size: 4.5rem;
 }
 
-.small-title {
+#displayedPredictionAccuracy {
     margin-top: 5px;
-    font-size: 1.25rem;
 }
 
-.v-alert {
+.v-alert.spacelab-alert {
     z-index: 1000;
     margin: 0;
     position: fixed;

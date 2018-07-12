@@ -1,7 +1,8 @@
 <template>
   <v-alert 
-    id="errorAlert"  
-    v-model="errorStatus"
+    id="errorAlert"
+    v-model="errorStatus"  
+    class="spacelab-alert"
     transition="scale-transition"
     type="error"
     dismissible>

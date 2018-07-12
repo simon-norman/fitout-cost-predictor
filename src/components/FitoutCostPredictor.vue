@@ -42,15 +42,14 @@
           />
           <v-btn 
             id="calculateCostPrediction"
-            class="secondary"
             block 
             @click="calculateCostPrediction()">Calculate cost prediction</v-btn>
           <div 
             id="displayedCostPrediction" 
-            class="large-title">Cost:  {{ fitoutCostPrediction.cost }}</div>
+            class="large-title display-2">Cost:  {{ fitoutCostPrediction.cost }}</div>
           <div 
             id="displayedPredictionAccuracy" 
-            class="small-title">Predictions currently accurate to 80%</div>
+            class="subheading">Predictions currently accurate to 80%</div>
         </v-flex>
       </v-layout>
     </v-container>
