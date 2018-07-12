@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="application-background">
     <router-view name="header"/>
     <router-view name="alert"/>
     <router-view/>

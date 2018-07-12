@@ -1,12 +1,16 @@
 <template>
   <v-toolbar 
     color="white" 
-    dark 
+    flat 
     fixed 
     app>
-    <img 
-      id="logo" 
-      src="https://www.spacelab.co.uk/hubfs/img/Spacelab-logo-dark.svg?noresize&t=1531308788486">
+    <div>
+      <div>
+        <img 
+          id="logo" 
+          src="../assets/spacelab-logo.svg">
+      </div>
+    </div>
   </v-toolbar>
 </template>
 <script>

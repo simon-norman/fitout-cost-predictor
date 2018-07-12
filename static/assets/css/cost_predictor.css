@@ -18,6 +18,10 @@
     background-color: #ffcb05 !important;
 }
 
+.application-background {
+    background: white !important;
+}
+
 .large-title, .secondary.v-btn, .small-title, .v-label, .v-toolbar__title {
     font-family: radikal_regular !important;
 }

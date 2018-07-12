@@ -123,7 +123,7 @@ export default {
     floorHeightErrors() {
       const errors = [];
       if (this.$v.fitoutPredictionParameters.floorHeight.$error) {
-        errors.push('Please provide a floor height (minimum 2 m.)');
+        errors.push('Please provide a floor height (minimum 2.5 m.)');
       }
       return errors;
     },
