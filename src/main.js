@@ -27,10 +27,10 @@ import './assets/stylus/main.styl';
 
 Vue.use(Vuelidate);
 
-const isProduction = process.env.NODE_ENV === 'Production';
+const isProduction = process.env.NODE_ENV === 'production';
 
 Vue.use(VueAnalytics, {
-  id: 122096477,
+  id: 'UA-122096477-1',
   router,
   debug: {
     enabled: !isProduction,

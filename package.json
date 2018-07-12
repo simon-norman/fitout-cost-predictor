@@ -10,6 +10,7 @@
     "build": "node build/build.js",
     "deploy-testing": "npm run build testing && firebase deploy -P testing",
     "deploy-production": "npm run build production && firebase deploy -P production",
+    "deploy-full": "npm run deploy-testing && npm run deploy-production",
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
