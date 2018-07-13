@@ -21,7 +21,7 @@ import App from './App.vue';
 import router from './router';
 import { store } from './store/store';
 
-import '../static/assets/css/cost_predictor.css';
+import '../static/assets/css/cost_predictor_base.css';
 import '../node_modules/vuetify/src/stylus/app.styl';
 import './assets/stylus/main.styl';
 

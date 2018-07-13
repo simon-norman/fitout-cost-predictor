@@ -9,8 +9,10 @@
       >
         <v-flex 
           xs12 
-          s4 
-          md3
+          sm7 
+          md5
+          lg4
+          xl3
           @keyup.enter="calculateCostPrediction()"          
         >
           <v-text-field
