@@ -130,19 +130,19 @@ export default {
       return errors;
     },
 
+    catAcatBErrorsWithoutMessage() {
+      if (this.$v.fitoutPredictionParameters.isEitherCatAOrBIncluded.$error) {
+        return true;
+      }
+      return false;
+    },
+
     catAcatBErrorsWithMessage() {
       const errors = [];
       if (this.$v.fitoutPredictionParameters.isEitherCatAOrBIncluded.$error) {
         errors.push('Please select at least one CAT A / CAT B option');
       }
       return errors;
-    },
-
-    catAcatBErrorsWithoutMessage() {
-      if (this.$v.fitoutPredictionParameters.isEitherCatAOrBIncluded.$error) {
-        return true;
-      }
-      return false;
     },
   },
   
