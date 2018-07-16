@@ -1,8 +1,10 @@
 
+import Vue from 'vue';
 import testUtilsWrapperFactory from '../__helpers__/test_utils_wrapper_factory';
 import Alert from '../../components/Alert.vue';
 
 jest.mock('axios');
+Vue.config.silent = true;
 
 const createStubbedVuexMutations = () => {
   const stubbedMutations = {
