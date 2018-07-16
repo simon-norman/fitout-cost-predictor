@@ -1,5 +1,7 @@
 <template>
-  <v-content>
+  <v-content
+    id="fitout-predictor-padding"
+    class="fitout-predictor-component">
     <v-container 
       fluid
       fill-height>
@@ -21,19 +23,20 @@
             :error-messages="floorAreaErrors"
             type="number"
             name="floor-area-input"
-            label="Floor area (sq. m. - minimum 1000 sq. m.)"/>
+            label="Floor area (min. 1000 sq. m.)"/>
           <v-text-field
             id="floorHeightInput"
             v-model="fitoutPredictionParameters.floorHeight"
             :error-messages="floorHeightErrors"
             type="number"
             name="floor-height-input"
-            label="Slab to slab floor height (m. - minimum 2.5m)"/>
+            label="Slab to slab floor height (min. 2.5m)"/>
           <v-checkbox
             id="isCatAIncludedInput"
             :label="`Will this project involve CAT A work?`"
             v-model="fitoutPredictionParameters.isCatAIncluded"
             :error="catAcatBErrorsWithoutMessage"
+            class="spacelab-label"
             hide-details
           />
           <v-checkbox
@@ -44,14 +47,12 @@
           />
           <v-btn 
             id="calculateCostPrediction"
+            class="spacelab-btn"
             block 
             @click="calculateCostPrediction()">Calculate cost prediction</v-btn>
           <div 
             id="displayedCostPrediction" 
-            class="large-title display-2">Cost:  {{ fitoutCostPrediction.cost }}</div>
-          <div 
-            id="displayedPredictionAccuracy" 
-            class="subheading">Predictions currently accurate to 80%</div>
+            class="large-title">Cost:  {{ fitoutCostPrediction.cost }}</div>
         </v-flex>
       </v-layout>
     </v-container>
@@ -108,17 +109,17 @@ export default {
   },
 
   computed: {
+    buildingVolume() {
+      return parseFloat(this.fitoutPredictionParameters.floorArea)
+      * parseFloat(this.fitoutPredictionParameters.floorHeight);
+    },
+
     floorAreaErrors() {
       const errors = [];
       if (this.$v.fitoutPredictionParameters.floorArea.$error) {
         errors.push('Please provide a floor area (minimum 1000 sq.m.)');
       }
       return errors;
-    },
-    
-    buildingVolume() {
-      return parseFloat(this.fitoutPredictionParameters.floorArea)
-      * parseFloat(this.fitoutPredictionParameters.floorHeight);
     },
 
     floorHeightErrors() {
@@ -151,6 +152,37 @@ export default {
       'UPDATE_ERROR_STATUS',
     ]),
 
+    calculateCostPrediction() {
+      if (this.arePredictionParametersValid()) {
+        this.getPredictionFromApi();
+      }
+    },
+
+    arePredictionParametersValid() {
+      this.$v.$touch();
+      if (!this.$v.$error) {
+        this.$v.$reset();
+        return true;
+      }
+      return false;
+    },
+
+    async getPredictionFromApi() {
+      try {
+        const response = 
+            await fitoutCostPredictorApi.getFitoutCostPrediction({
+              buildingVolume: this.buildingVolume,
+              isCatAIncluded: this.fitoutPredictionParameters.isCatAIncluded,
+              isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
+            });
+        console.log(response);
+        this.fitoutCostPrediction.cost = this.formatCost(response.data.cost);
+      } catch (error) {
+        console.log(error);
+        this.handleError(error);
+      }
+    },
+
     formatCost(predictedCost) {
       if (predictedCost < 0.999) {
         return this.formatCostInThousands(predictedCost);
@@ -172,37 +204,6 @@ export default {
     handleError() {
       this.UPDATE_ERROR_MESSAGE(this.errorMessage);
       this.UPDATE_ERROR_STATUS(true);
-    },
-
-    arePredictionParametersValid() {
-      this.$v.$touch();
-      if (!this.$v.$error) {
-        this.$v.$reset();
-        return true;
-      }
-      return false;
-    },
-
-    calculateCostPrediction() {
-      if (this.arePredictionParametersValid()) {
-        this.getPredictionFromApi();
-      }
-    },
-
-    async getPredictionFromApi() {
-      try {
-        const response = 
-            await fitoutCostPredictorApi.getFitoutCostPrediction({
-              buildingVolume: this.buildingVolume,
-              isCatAIncluded: this.fitoutPredictionParameters.isCatAIncluded,
-              isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
-            });
-        console.log(response);
-        this.fitoutCostPrediction.cost = this.formatCost(response.data.cost);
-      } catch (error) {
-        console.log(error);
-        this.handleError(error);
-      }
     },
   },
 };

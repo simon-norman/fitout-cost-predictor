@@ -2,12 +2,12 @@
   <v-toolbar 
     color="white" 
     flat 
-    fixed 
+    absolute 
     app>
     <div>
       <div>
         <img 
-          id="logo" 
+          class="logo" 
           src="../assets/spacelab-logo.svg">
       </div>
     </div>
