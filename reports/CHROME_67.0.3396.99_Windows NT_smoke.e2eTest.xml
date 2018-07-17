@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="0"
+            tests="1">
+
+  <testsuite name="smoke.e2eTest"
+    errors="0" failures="0" hostname="" id="" package="smoke.e2eTest" skipped="0"
+    tests="1" time="7.152" timestamp="Tue, 17 Jul 2018 15:17:10 GMT">
+  
+    <testcase name="Smoke test that fitout cost predictor page loads" classname="smoke.e2eTest" time="7.152" assertions="1">
+
+    
+    </testcase>
+  
+
+  
+
+  
+  </testsuite>
+</testsuites>

@@ -16,7 +16,7 @@ module.exports = {
   
     "test_settings" : {
       "default" : {
-        "launch_url" : "http://localhost:8080",
+        "launch_url" : "https://testing-cost-predictor.firebaseapp.com",
         "selenium_port"  : 4444,
         "selenium_host"  : "localhost",
         "silent": true,
@@ -27,12 +27,8 @@ module.exports = {
         },
         "desiredCapabilities": {
           "browserName": "firefox",
-          "marionette": true
+          "marionette": true,
         }
-      },
-      
-      "testing" : {
-        "launch_url" : "https://testing-cost-predictor.firebaseapp.com",
       },
   
       "chrome" : {
