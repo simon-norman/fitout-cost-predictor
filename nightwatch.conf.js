@@ -36,11 +36,5 @@ module.exports = {
           "browserName": "chrome"
         }
       },
-  
-      "edge" : {
-        "desiredCapabilities": {
-          "browserName": "MicrosoftEdge"
-        }
-      }
     }
   }

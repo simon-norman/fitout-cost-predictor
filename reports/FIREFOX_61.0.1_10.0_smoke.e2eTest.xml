@@ -5,9 +5,9 @@
 
   <testsuite name="smoke.e2eTest"
     errors="0" failures="0" hostname="" id="" package="smoke.e2eTest" skipped="0"
-    tests="1" time="10.51" timestamp="Tue, 17 Jul 2018 15:08:18 GMT">
+    tests="1" time="8.534" timestamp="Tue, 17 Jul 2018 16:47:55 GMT">
   
-    <testcase name="Smoke test that fitout cost predictor page loads" classname="smoke.e2eTest" time="10.51" assertions="1">
+    <testcase name="Smoke test that fitout cost predictor page loads" classname="smoke.e2eTest" time="8.534" assertions="1">
 
     
     </testcase>

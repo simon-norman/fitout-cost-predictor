@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="1"
+            tests="1">
+
+  <testsuite name="costPrediction.e2eTest"
+    errors="0" failures="1" hostname="" id="" package="costPrediction.e2eTest" skipped="0"
+    tests="1" time="8.222" timestamp="Tue, 17 Jul 2018 16:46:49 GMT">
+  
+    <testcase name="Calculated cost prediction displays" classname="costPrediction.e2eTest" time="8.222" assertions="1">  <failure message="Expected element &lt;#displayedCostPrediction&gt; text to contain: &#34;£&#34;">    at Object.Calculated cost prediction displays (C:\frontend-cost-predictor\src\e2e_tests\costPrediction.e2eTest.js:14:20)
+    at _combinedTickCallback (internal/process/next_tick.js:131:7)</failure>
+
+    
+    </testcase>
+  
+
+  
+
+  
+  </testsuite>
+</testsuites>
