@@ -91,20 +91,24 @@ export default {
         required,
         minValue: minValue(1000),
       },
+      
       floorHeight: { 
         required, 
         minValue: minValue(2.5), 
       },
-      isCatAIncluded: {
-        required(v) {
-          return this.fitoutPredictionParameters.isCatBIncluded || required(v);
-        },
-      },
+
       isCatBIncluded: {
         required(v) {
           return this.fitoutPredictionParameters.isCatAIncluded || required(v);
         },
       },
+
+      isCatAIncluded: {
+        required(v) {
+          return this.fitoutPredictionParameters.isCatBIncluded || required(v);
+        },
+      },
+      
       isEitherCatAOrBIncluded: ['fitoutPredictionParameters.isCatAIncluded', 'fitoutPredictionParameters.isCatBIncluded'],
     },
   },
