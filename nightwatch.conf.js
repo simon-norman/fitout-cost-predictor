@@ -14,8 +14,8 @@ module.exports = {
       "log_path" : false,
       "port" : 4444,
       "cli_args" : {
-        "webdriver.gecko.driver" : "./src/e2e_tests/bin/geckodriver.exe",
-        "webdriver.chrome.driver" : "./src/e2e_tests/bin/chromedriver.exe"
+        "webdriver.gecko.driver" : "geckodriver.exe",
+        "webdriver.chrome.driver" : "chromedriver.exe"
       }
     },
   
