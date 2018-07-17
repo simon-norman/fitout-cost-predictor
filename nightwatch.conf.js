@@ -1,5 +1,4 @@
 
-
 module.exports = {
     "src_folders" : ["./src/e2e_tests"],
     "output_folder" : "reports",
@@ -13,10 +12,6 @@ module.exports = {
       "server_path" : "./src/e2e_tests/bin/selenium-server-standalone-3.9.1.jar",
       "log_path" : false,
       "port" : 4444,
-      "cli_args" : {
-        "webdriver.gecko.driver" : "geckodriver.exe",
-        "webdriver.chrome.driver" : "chromedriver.exe"
-      }
     },
   
     "test_settings" : {
@@ -38,9 +33,6 @@ module.exports = {
       
       "testing" : {
         "launch_url" : "https://testing-cost-predictor.firebaseapp.com",
-        "globals" : {
-          "myGlobalVar" : "other value"
-        }
       },
   
       "chrome" : {
