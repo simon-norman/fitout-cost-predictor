@@ -8,6 +8,7 @@
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
     "unit-test": "jest",
+    "e2e-test": "nightwatch --env testing",
     "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src"
   },
@@ -64,6 +65,7 @@
     "jest-extended": "^0.7.2",
     "jest-vue-preprocessor": "^1.4.0",
     "lodash": "^4.17.10",
+    "nightwatch":"^0.9.21",
     "opn": "^5.1.0",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.3.0",

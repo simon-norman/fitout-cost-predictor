@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="1"
+            failures="0"
+            tests="1">
+
+  <testsuite name="smoke.e2eTest"
+    errors="1" failures="0" hostname="" id="" package="smoke.e2eTest" skipped="0"
+    tests="1" time="0.01700" timestamp="Tue, 17 Jul 2018 13:01:09 GMT">
+  
+    <testcase name="Smoke test that fitout cost predictor page loads" classname="smoke.e2eTest" time="0.01700" assertions="0">
+    </testcase>
+  
+
+  
+    <system-err>
+        Error while running [Smoke E2e Test / Smoke test that fitout cost predictor page loads]:
+
+  TypeError: browser.url(...).waitForElementVisible(...).expect.element(...).to.be.present.end is not a function
+    at Object.Smoke test that fitout cost predictor page loads (C:\frontend-cost-predictor\src\e2e_tests\smoke.e2eTest.js:9:8)
+    at Module.call (C:\Users\User\AppData\Roaming\npm\node_modules\nightwatch\lib\runner\module.js:62:34)
+    at C:\Users\User\AppData\Roaming\npm\node_modules\nightwatch\lib\runner\testcase.js:70:29
+    at _fulfilled (C:\Users\User\AppData\Roaming\npm\node_modules\nightwatch\node_modules\q\q.js:834:54)
+    at self.promiseDispatch.done (C:\Users\User\AppData\Roaming\npm\node_modules\nightwatch\node_modules\q\q.js:863:30)
+    at Promise.promise.promiseDispatch (C:\Users\User\AppData\Roaming\npm\node_modules\nightwatch\node_modules\q\q.js:796:13)
+    at C:\Users\User\AppData\Roaming\npm\node_modules\nightwatch\node_modules\q\q.js:556:49
+    at runSingle (C:\Users\User\AppData\Roaming\npm\node_modules\nightwatch\node_modules\q\q.js:137:13)
+    at flush (C:\Users\User\AppData\Roaming\npm\node_modules\nightwatch\node_modules\q\q.js:125:13)
+    at _combinedTickCallback (internal/process/next_tick.js:131:7)
+    </system-err>
+  
+
+  
+  </testsuite>
+</testsuites>
