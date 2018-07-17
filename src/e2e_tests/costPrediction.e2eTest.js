@@ -13,6 +13,7 @@ module.exports = {
     browser.click('#calculateCostPrediction');
     browser.pause(2000);
     browser.expect.element('#displayedCostPrediction').text.to.contain('£');
+    browser.expect.element('#errorAlert').to.not.be.visible;
     browser.end();
   },
 };

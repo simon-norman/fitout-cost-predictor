@@ -5,9 +5,11 @@
 
   <testsuite name="costPrediction.e2eTest"
     errors="0" failures="0" hostname="" id="" package="costPrediction.e2eTest" skipped="0"
-    tests="1" time="13.69" timestamp="Tue, 17 Jul 2018 16:47:41 GMT">
+    tests="1" time="14.66" timestamp="Tue, 17 Jul 2018 17:05:47 GMT">
   
-    <testcase name="Calculated cost prediction displays" classname="costPrediction.e2eTest" time="13.69" assertions="1">
+    <testcase name="Calculated cost prediction displays" classname="costPrediction.e2eTest" time="14.66" assertions="2">
+
+    
 
     
     </testcase>
