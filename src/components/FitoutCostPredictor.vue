@@ -63,6 +63,7 @@
 import { mapMutations } from 'vuex';
 import { required, minValue } from 'vuelidate/lib/validators';
 import FitoutCostPredictorApi from '../api/fitoutCostPredictorApi';
+import { handleError } from '../error_handler/errorHandler';
 
 const fitoutCostPredictorApi = new FitoutCostPredictorApi();
 
@@ -157,9 +158,14 @@ export default {
       'UPDATE_ERROR_STATUS',
     ]),
 
-    calculateCostPrediction() {
+    async calculateCostPrediction() {
       if (this.arePredictionParametersValid()) {
-        this.getPredictionFromApi();
+        try {
+          const cost = await this.getCostPrediction();
+          this.fitoutCostPrediction.cost = this.formatCost(cost);
+        } catch (error) {
+          handleError(error);
+        }
       }
     },
 
@@ -172,7 +178,7 @@ export default {
       return false;
     },
 
-    async getPredictionFromApi() {
+    async getCostPrediction() {
       try {
         const response = 
             await fitoutCostPredictorApi.getFitoutCostPrediction({
@@ -181,34 +187,35 @@ export default {
               isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
             });
         console.log(response);
-        this.fitoutCostPrediction.cost = this.formatCost(response.data.cost);
+        return response.data.cost;
       } catch (error) {
-        console.log(error);
-        this.handleError(error);
+        throw error;
       }
     },
 
     formatCost(predictedCost) {
-      if (predictedCost < 0.999) {
-        return this.formatCostInThousands(predictedCost);
-      } 
-      return this.formatCostInMillions(predictedCost);
+      const costFormattedAsNumber = Number.parseFloat(predictedCost);
+
+      if (Number.isNaN(costFormattedAsNumber)) {
+        throw new Error('Cost prediction value is not a number');
+      } else if (costFormattedAsNumber < 0.025) {
+        throw new Error('Cost prediction value is less than 25k - not a realistic figure');
+      } else if (costFormattedAsNumber < 0.999) {
+        return this.formatCostInThousands(costFormattedAsNumber);
+      } else {
+        return this.formatCostInMillions(costFormattedAsNumber);
+      }
     },
 
-    formatCostInThousands(predictedCost) {
-      const costFormattedInThousands = Number.parseFloat(predictedCost) * 1000;
+    formatCostInThousands(costFormattedAsNumber) {
+      const costFormattedInThousands = costFormattedAsNumber * 1000;
       const costThreeSignificantFigures = costFormattedInThousands.toPrecision(3);
       return `£${costThreeSignificantFigures}k`;
     },
 
-    formatCostInMillions(predictedCost) {
-      const costToTwoDecimals = Number.parseFloat(predictedCost).toFixed(2);
-      return `£${costToTwoDecimals}m`;
-    },
-
-    handleError() {
-      this.UPDATE_ERROR_MESSAGE(this.errorMessage);
-      this.UPDATE_ERROR_STATUS(true);
+    formatCostInMillions(costFormattedAsNumber) {
+      const costFormattedToTwoDecimals = costFormattedAsNumber.toFixed(2);
+      return `£${costFormattedToTwoDecimals}m`;
     },
   },
 };

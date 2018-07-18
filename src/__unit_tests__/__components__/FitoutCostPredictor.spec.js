@@ -3,17 +3,12 @@ import Vue from 'vue';
 import mockAxios from 'axios';
 import testUtilsWrapperFactory from '../__helpers__/test_utils_wrapper_factory';
 import FitoutCostPredictor from '../../components/FitoutCostPredictor.vue';
+import alerts from './../../store/modules/alerts';
+
+jest.mock('./../../store/modules/alerts');
 
 jest.mock('axios');
 Vue.config.silent = true;
-
-const createStubbedVuexMutations = () => {
-  const stubbedMutations = {
-    UPDATE_ERROR_MESSAGE: jest.fn(() => ''),
-    UPDATE_ERROR_STATUS: jest.fn(() => ''),
-  };
-  return stubbedMutations;
-};
 
 describe('FitoutCostPredictor.vue', () => {
   let costPredictionFloorInputs;
@@ -35,8 +30,7 @@ describe('FitoutCostPredictor.vue', () => {
     };
 
     calculatedCostPrediction = { 
-      cost: 1.53163151335624657245, 
-      predictionAccuracy: '65%', 
+      cost: 1.53163151335624657245,
     };
 
     vueTestWrapperElements = {
@@ -49,10 +43,10 @@ describe('FitoutCostPredictor.vue', () => {
           isCatBIncluded: true,
         },
       },
-      vuexStoreStubs: { 
-        stubbedVuexMutations: createStubbedVuexMutations(), 
-      },
+      vuexStoreStubs: '',
     };
+
+    /* mockErrorHandler.mockClear(); */
 
     mockAxios.post.mockClear();
 
@@ -82,7 +76,7 @@ describe('FitoutCostPredictor.vue', () => {
       expect(mockAxios.post.mock.calls[0][1]).toEqual(costPredictionApiParameters);
     });
 
-    it('should display the predicted cost and accuracy returned by the API, correctly formatted in £m', async () => {
+    it('should display the predicted cost returned by the API, correctly formatted in £m', async () => {
       const wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
       
       wrapper.find('#floorAreaInput').setValue(costPredictionFloorInputs.floorArea);
@@ -172,13 +166,52 @@ describe('FitoutCostPredictor.vue', () => {
       await wrapper.vm.$nextTick();
       await wrapper.vm.$nextTick();
 
-      expect(vueTestWrapperElements.vuexStoreStubs
-        .stubbedVuexMutations.UPDATE_ERROR_STATUS.mock.calls[0][1])
-        .toEqual(true);
+      expect(alerts.mutations.UPDATE_ERROR_STATUS.mock.calls[0][1]).toEqual(true);
+      expect(alerts.mutations.UPDATE_ERROR_MESSAGE.mock.calls[0][1]);
+    });
 
-      expect(vueTestWrapperElements.vuexStoreStubs
-        .stubbedVuexMutations.UPDATE_ERROR_MESSAGE.mock.calls[0][1])
-        .toEqual(wrapper.vm.errorMessage);
+    it('should throw error and activate alert if api returns an invalid cost value', async () => {
+      calculatedCostPrediction.cost = 'invalid data - not a number';
+      mockAxios.post.mockImplementation(() =>
+        Promise.resolve({
+          data: calculatedCostPrediction,
+        }));
+      const wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
+
+      wrapper.find('#floorAreaInput').setValue(costPredictionFloorInputs.floorArea);
+      wrapper.find('#floorHeightInput').setValue(costPredictionFloorInputs.floorHeight);
+  
+      await wrapper.vm.$nextTick();
+  
+      wrapper.find('#calculateCostPrediction').trigger('click');
+
+      await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
+
+      expect(alerts.mutations.UPDATE_ERROR_STATUS.mock.calls[0][1]).toEqual(true);
+      expect(alerts.mutations.UPDATE_ERROR_MESSAGE.mock.calls[0][1]);
+    });
+
+    it('should throw error if api returns cost value less than 25k', async () => {
+      calculatedCostPrediction.cost = '0.0249';
+      mockAxios.post.mockImplementation(() =>
+        Promise.resolve({
+          data: calculatedCostPrediction,
+        }));
+      const wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
+
+      wrapper.find('#floorAreaInput').setValue(costPredictionFloorInputs.floorArea);
+      wrapper.find('#floorHeightInput').setValue(costPredictionFloorInputs.floorHeight);
+  
+      await wrapper.vm.$nextTick();
+  
+      wrapper.find('#calculateCostPrediction').trigger('click');
+
+      await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
+
+      expect(alerts.mutations.UPDATE_ERROR_STATUS.mock.calls[0][1]).toEqual(true);
+      expect(alerts.mutations.UPDATE_ERROR_MESSAGE.mock.calls[0][1]);
     });
   });
 });
