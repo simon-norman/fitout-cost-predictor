@@ -11,7 +11,8 @@ const displayError = (errorMessage) => {
 const handleError = (error) => {
   let errorMessage;
   if (error.message === 'Network Error') {
-    errorMessage = 'So sorry, we can\'t connect to the internet - please check your internet connection and try again';
+    errorMessage = 'So sorry, we\'re having trouble connecting to the internet' + 
+    '- please check your connection, or try again later';
   } else if (error.isCustomError) {
     errorMessage = error.publicErrorMessage;
   } else {

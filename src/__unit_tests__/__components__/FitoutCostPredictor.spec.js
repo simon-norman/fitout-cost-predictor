@@ -153,7 +153,7 @@ describe('FitoutCostPredictor.vue', () => {
     });
 
     it('should activate alert if error from calling api, by updating vuex store', async () => {
-      mockAxios.post.mockImplementation(() => Promise.reject());
+      mockAxios.post.mockImplementation(() => Promise.reject(new Error('error')));
       const wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
 
       wrapper.find('#floorAreaInput').setValue(costPredictionFloorInputs.floorArea);
@@ -192,8 +192,8 @@ describe('FitoutCostPredictor.vue', () => {
       expect(alerts.mutations.UPDATE_ERROR_MESSAGE.mock.calls[0][1]);
     });
 
-    it('should throw error if api returns cost value less than 25k', async () => {
-      calculatedCostPrediction.cost = '0.0249';
+    it('should throw error if api returns cost value less than 10k', async () => {
+      calculatedCostPrediction.cost = '0.00999';
       mockAxios.post.mockImplementation(() =>
         Promise.resolve({
           data: calculatedCostPrediction,

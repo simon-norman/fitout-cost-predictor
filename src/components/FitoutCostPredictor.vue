@@ -199,8 +199,8 @@ export default {
 
       if (Number.isNaN(costFormattedAsNumber)) {
         throw new Error('Cost prediction value is not a number');
-      } else if (costFormattedAsNumber < 0) {
-        throw new ErrorWithCustomMsgToUser('Cost prediction is less than £0');
+      } else if (costFormattedAsNumber < 0.01) {
+        throw new ErrorWithCustomMsgToUser('Cost prediction is less than £10k, which is too small to be considered accurate');
       } else if (costFormattedAsNumber < 0.999) {
         return this.formatCostInThousands(costFormattedAsNumber);
       } else {
