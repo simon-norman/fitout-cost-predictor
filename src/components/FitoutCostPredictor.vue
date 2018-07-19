@@ -64,6 +64,7 @@ import { mapMutations } from 'vuex';
 import { required, minValue } from 'vuelidate/lib/validators';
 import FitoutCostPredictorApi from '../api/fitoutCostPredictorApi';
 import { handleError } from '../error_handler/errorHandler';
+import ErrorWithCustomMsgToUser from '../error/errorWithCustomMsgToUser';
 
 const fitoutCostPredictorApi = new FitoutCostPredictorApi();
 
@@ -198,8 +199,8 @@ export default {
 
       if (Number.isNaN(costFormattedAsNumber)) {
         throw new Error('Cost prediction value is not a number');
-      } else if (costFormattedAsNumber < 0.025) {
-        throw new Error('Cost prediction value is less than 25k - not a realistic figure');
+      } else if (costFormattedAsNumber < 0) {
+        throw new ErrorWithCustomMsgToUser('Cost prediction is less than £0');
       } else if (costFormattedAsNumber < 0.999) {
         return this.formatCostInThousands(costFormattedAsNumber);
       } else {
