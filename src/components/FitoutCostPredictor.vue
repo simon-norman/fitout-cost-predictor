@@ -179,16 +179,12 @@ export default {
       return false;
     },
 
-    async getCostPrediction() {
-      try {
-        return fitoutCostPredictorApi.getFitoutCostPrediction({
-          buildingVolume: this.buildingVolume,
-          isCatAIncluded: this.fitoutPredictionParameters.isCatAIncluded,
-          isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
-        }).then(resp => resp.data.const);
-      } catch (error) {
-        throw error;
-      }
+    getCostPrediction() {
+      return fitoutCostPredictorApi.getFitoutCostPrediction({
+        buildingVolume: this.buildingVolume,
+        isCatAIncluded: this.fitoutPredictionParameters.isCatAIncluded,
+        isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
+      }).then(resp => resp.data.cost);
     },
 
     formatCost(predictedCost) {

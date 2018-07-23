@@ -84,6 +84,7 @@ describe('FitoutCostPredictor.vue', () => {
       await wrapper.vm.$nextTick();
       wrapper.find('#calculateCostPrediction').trigger('click');
       await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
       
       const costToTwoDecimals = Number.parseFloat(calculatedCostPrediction.cost).toFixed(2);
       const costFullyFormatted = `£${costToTwoDecimals}m`;
@@ -99,6 +100,7 @@ describe('FitoutCostPredictor.vue', () => {
       wrapper.find('#floorHeightInput').setValue(costPredictionFloorInputs.floorHeight);
       await wrapper.vm.$nextTick();
       wrapper.find('#calculateCostPrediction').trigger('click');
+      await wrapper.vm.$nextTick();
       await wrapper.vm.$nextTick();
       
       const costFormattedInThousands = Number.parseFloat(calculatedCostPrediction.cost) * 1000;
@@ -125,10 +127,10 @@ describe('FitoutCostPredictor.vue', () => {
       const wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
       expect(wrapper.vm.$v.fitoutPredictionParameters.floorArea.$error).toBeFalse();
       expect(wrapper.vm.$v.fitoutPredictionParameters.floorHeight.$error).toBeFalse();
-
       wrapper.find('#floorHeightInput').setValue(2.49);
       wrapper.find('#floorAreaInput').setValue(999.99);
       await wrapper.vm.$nextTick();
+
       wrapper.find('#calculateCostPrediction').trigger('click');
       await wrapper.vm.$nextTick();
       
@@ -141,9 +143,9 @@ describe('FitoutCostPredictor.vue', () => {
       vueTestWrapperElements.componentTestData.fitoutPredictionParameters.isCatAIncluded = false;
       vueTestWrapperElements.componentTestData.fitoutPredictionParameters.isCatBIncluded = false;
       const wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
-
       wrapper.find('#floorAreaInput').setValue(costPredictionFloorInputs.floorArea);
       wrapper.find('#floorHeightInput').setValue(costPredictionFloorInputs.floorHeight);
+
       wrapper.find('#calculateCostPrediction').trigger('click');
       await wrapper.vm.$nextTick();
       
