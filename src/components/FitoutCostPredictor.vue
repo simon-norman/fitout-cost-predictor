@@ -87,34 +87,6 @@ export default {
     };    
   },
 
-  validations: {
-    fitoutPredictionParameters: {
-      floorArea: { 
-        required,
-        minValue: minValue(1000),
-      },
-      
-      floorHeight: { 
-        required, 
-        minValue: minValue(2.5), 
-      },
-
-      isCatBIncluded: {
-        required(v) {
-          return this.fitoutPredictionParameters.isCatAIncluded || required(v);
-        },
-      },
-
-      isCatAIncluded: {
-        required(v) {
-          return this.fitoutPredictionParameters.isCatBIncluded || required(v);
-        },
-      },
-      
-      isEitherCatAOrBIncluded: ['fitoutPredictionParameters.isCatAIncluded', 'fitoutPredictionParameters.isCatBIncluded'],
-    },
-  },
-
   computed: {
     buildingVolume() {
       return parseFloat(this.fitoutPredictionParameters.floorArea)
@@ -150,6 +122,39 @@ export default {
         return true;
       }
       return false;
+    },
+  },
+
+  mounted() {
+    console.log('Mounting FitoutCostPredictor');
+    throw new Error('OOPS!');
+  },
+
+  validations: {
+    fitoutPredictionParameters: {
+      floorArea: { 
+        required,
+        minValue: minValue(1000),
+      },
+      
+      floorHeight: { 
+        required, 
+        minValue: minValue(2.5), 
+      },
+
+      isCatBIncluded: {
+        required(v) {
+          return this.fitoutPredictionParameters.isCatAIncluded || required(v);
+        },
+      },
+
+      isCatAIncluded: {
+        required(v) {
+          return this.fitoutPredictionParameters.isCatBIncluded || required(v);
+        },
+      },
+      
+      isEitherCatAOrBIncluded: ['fitoutPredictionParameters.isCatAIncluded', 'fitoutPredictionParameters.isCatBIncluded'],
     },
   },
   
@@ -192,6 +197,12 @@ export default {
       } catch (error) {
         throw error;
       }
+
+      // return fitoutCostPredictorApi.getFitoutCostPrediction({
+      //         buildingVolume: this.buildingVolume,
+      //         isCatAIncluded: this.fitoutPredictionParameters.isCatAIncluded,
+      //         isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
+      //       }).then(resp => resp.data.const)
     },
 
     formatCost(predictedCost) {

@@ -41,7 +41,8 @@ module.exports = {
         "array": false,
         "object": true
       }
-    }, {
+    }, 
+    {
       "enforceForRenamedProperties": false
     }]
   }
