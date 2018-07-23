@@ -125,11 +125,6 @@ export default {
     },
   },
 
-  mounted() {
-    console.log('Mounting FitoutCostPredictor');
-    throw new Error('OOPS!');
-  },
-
   validations: {
     fitoutPredictionParameters: {
       floorArea: { 
@@ -186,23 +181,14 @@ export default {
 
     async getCostPrediction() {
       try {
-        const response = 
-            await fitoutCostPredictorApi.getFitoutCostPrediction({
-              buildingVolume: this.buildingVolume,
-              isCatAIncluded: this.fitoutPredictionParameters.isCatAIncluded,
-              isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
-            });
-        console.log(response);
-        return response.data.cost;
+        return fitoutCostPredictorApi.getFitoutCostPrediction({
+          buildingVolume: this.buildingVolume,
+          isCatAIncluded: this.fitoutPredictionParameters.isCatAIncluded,
+          isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
+        }).then(resp => resp.data.const);
       } catch (error) {
         throw error;
       }
-
-      // return fitoutCostPredictorApi.getFitoutCostPrediction({
-      //         buildingVolume: this.buildingVolume,
-      //         isCatAIncluded: this.fitoutPredictionParameters.isCatAIncluded,
-      //         isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
-      //       }).then(resp => resp.data.const)
     },
 
     formatCost(predictedCost) {
