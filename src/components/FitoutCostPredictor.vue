@@ -184,7 +184,7 @@ export default {
         buildingVolume: this.buildingVolume,
         isCatAIncluded: this.fitoutPredictionParameters.isCatAIncluded,
         isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
-      }).then(resp => resp.data.cost);
+      }).then((resp) => resp.data.cost);
     },
 
     formatCost(predictedCost) {
