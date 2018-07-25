@@ -45,6 +45,12 @@
             v-model="fitoutPredictionParameters.isCatBIncluded"
             :error-messages="catAcatBErrorsWithMessage"
           />
+          <v-select
+            id="sectorSelector"
+            :items="sectorOptions"
+            v-model="fitoutPredictionParameters.sectorSelected"
+            label="Sector"
+          />
           <v-btn 
             id="calculateCostPrediction"
             class="spacelab-btn"
@@ -81,7 +87,9 @@ export default {
         floorHeight: '',
         isCatAIncluded: false,
         isCatBIncluded: false,
+        sectorSelected: '',
       },
+      sectorOptions: ['Financial Services'],
       errorMessage: 'So sorry, there\'s been an error - ' +
           'please try again later',
     };    

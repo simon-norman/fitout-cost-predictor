@@ -27,6 +27,7 @@ describe('FitoutCostPredictor.vue', () => {
       parseFloat(costPredictionFloorInputs.floorHeight),
       isCatAIncluded: true,
       isCatBIncluded: true,
+      sector: 'Financial Services',
     };
 
     calculatedCostPrediction = { 
@@ -65,10 +66,11 @@ describe('FitoutCostPredictor.vue', () => {
   });
 
   describe('Predict cost', () => {
-    it('should call the cost predictor API with the data (e.g. floor area) needed to make prediction', async () => {
+    it.only('should call the cost predictor API with the data (e.g. floor area) needed to make prediction', async () => {
       const wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
       wrapper.find('#floorAreaInput').setValue(costPredictionFloorInputs.floorArea);
       wrapper.find('#floorHeightInput').setValue(costPredictionFloorInputs.floorHeight);
+      // set sector to financial services
       await wrapper.vm.$nextTick();
 
       wrapper.find('#calculateCostPrediction').trigger('click');
@@ -109,7 +111,9 @@ describe('FitoutCostPredictor.vue', () => {
 
       expect(wrapper.find('#displayedCostPrediction').element.textContent.includes(costFullyFormatted)).toBeTruthy();
     });
+  });
 
+  describe('Prediction parameters form validation', () => {
     it('should display error message and not call api if FLOOR AREA or FLOOR HEIGHT are not inputted', async () => {
       const wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
       expect(wrapper.vm.$v.fitoutPredictionParameters.floorArea.$error).toBeFalse();
@@ -153,7 +157,9 @@ describe('FitoutCostPredictor.vue', () => {
       expect(wrapper.vm.$v.fitoutPredictionParameters.isCatAIncluded.$error).toBeTrue();
       expect(wrapper.vm.$v.fitoutPredictionParameters.isCatBIncluded.$error).toBeTrue();
     });
+  });
 
+  describe('Handle errors', () => {
     it('should activate alert if error from calling api, by updating vuex store', async () => {
       mockAxios.post.mockImplementation(() => Promise.reject(new Error('error')));
       const wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
