@@ -19,14 +19,14 @@
         >
           <v-text-field
             id="floorAreaInput"
-            v-model="fitoutPredictionParameters.floorArea"
+            v-model="fitoutPredictionInputs.floorArea"
             :error-messages="floorAreaErrors"
             type="number"
             name="floor-area-input"
             label="Floor area (min. 1000 sq. m.)"/>
           <v-text-field
             id="floorHeightInput"
-            v-model="fitoutPredictionParameters.floorHeight"
+            v-model="fitoutPredictionInputs.floorHeight"
             :error-messages="floorHeightErrors"
             type="number"
             name="floor-height-input"
@@ -34,7 +34,7 @@
           <v-checkbox
             id="isCatAIncludedInput"
             :label="`Will this project involve CAT A work?`"
-            v-model="fitoutPredictionParameters.isCatAIncluded"
+            v-model="fitoutPredictionInputs.isCatAIncluded"
             :error="catAcatBErrorsWithoutMessage"
             class="spacelab-label"
             hide-details
@@ -42,13 +42,14 @@
           <v-checkbox
             id="isCatBIncludedInput"
             :label="`Will this project involve CAT B work?`"
-            v-model="fitoutPredictionParameters.isCatBIncluded"
+            v-model="fitoutPredictionInputs.isCatBIncluded"
             :error-messages="catAcatBErrorsWithMessage"
           />
           <v-select
             id="sectorSelector"
             :items="sectorOptions"
-            v-model="fitoutPredictionParameters.sectorSelected"
+            v-model="fitoutPredictionInputs.selectedSector"
+            content-class="sector-dropdown-list"
             label="Sector"
           />
           <v-btn 
@@ -82,14 +83,14 @@ export default {
       fitoutCostPrediction: {
         cost: '',
       },
-      fitoutPredictionParameters: {
+      fitoutPredictionInputs: {
         floorArea: '',
         floorHeight: '',
         isCatAIncluded: false,
         isCatBIncluded: false,
-        sectorSelected: '',
+        selectedSector: '',
       },
-      sectorOptions: ['Financial Services'],
+      sectorOptions: ['Financial Services', 'Professional Services'],
       errorMessage: 'So sorry, there\'s been an error - ' +
           'please try again later',
     };    
@@ -97,13 +98,13 @@ export default {
 
   computed: {
     buildingVolume() {
-      return parseFloat(this.fitoutPredictionParameters.floorArea)
-      * parseFloat(this.fitoutPredictionParameters.floorHeight);
+      return parseFloat(this.fitoutPredictionInputs.floorArea)
+      * parseFloat(this.fitoutPredictionInputs.floorHeight);
     },
 
     floorAreaErrors() {
       const errors = [];
-      if (this.$v.fitoutPredictionParameters.floorArea.$error) {
+      if (this.$v.fitoutPredictionInputs.floorArea.$error) {
         errors.push('Please provide a floor area (minimum 1000 sq.m.)');
       }
       return errors;
@@ -111,7 +112,7 @@ export default {
 
     floorHeightErrors() {
       const errors = [];
-      if (this.$v.fitoutPredictionParameters.floorHeight.$error) {
+      if (this.$v.fitoutPredictionInputs.floorHeight.$error) {
         errors.push('Please provide a floor height (minimum 2.5 m.)');
       }
       return errors;
@@ -119,14 +120,14 @@ export default {
 
     catAcatBErrorsWithMessage() {
       const errors = [];
-      if (this.$v.fitoutPredictionParameters.isEitherCatAOrBIncluded.$error) {
+      if (this.$v.fitoutPredictionInputs.isEitherCatAOrBIncluded.$error) {
         errors.push('Please select at least one CAT A / CAT B option');
       }
       return errors;
     },
 
     catAcatBErrorsWithoutMessage() {
-      if (this.$v.fitoutPredictionParameters.isEitherCatAOrBIncluded.$error) {
+      if (this.$v.fitoutPredictionInputs.isEitherCatAOrBIncluded.$error) {
         return true;
       }
       return false;
@@ -134,7 +135,7 @@ export default {
   },
 
   validations: {
-    fitoutPredictionParameters: {
+    fitoutPredictionInputs: {
       floorArea: { 
         required,
         minValue: minValue(1000),
@@ -147,17 +148,17 @@ export default {
 
       isCatBIncluded: {
         required(v) {
-          return this.fitoutPredictionParameters.isCatAIncluded || required(v);
+          return this.fitoutPredictionInputs.isCatAIncluded || required(v);
         },
       },
 
       isCatAIncluded: {
         required(v) {
-          return this.fitoutPredictionParameters.isCatBIncluded || required(v);
+          return this.fitoutPredictionInputs.isCatBIncluded || required(v);
         },
       },
       
-      isEitherCatAOrBIncluded: ['fitoutPredictionParameters.isCatAIncluded', 'fitoutPredictionParameters.isCatBIncluded'],
+      isEitherCatAOrBIncluded: ['fitoutPredictionInputs.isCatAIncluded', 'fitoutPredictionInputs.isCatBIncluded'],
     },
   },
   
@@ -190,8 +191,9 @@ export default {
     getCostPrediction() {
       return fitoutCostPredictorApi.getFitoutCostPrediction({
         buildingVolume: this.buildingVolume,
-        isCatAIncluded: this.fitoutPredictionParameters.isCatAIncluded,
-        isCatBIncluded: this.fitoutPredictionParameters.isCatBIncluded,
+        isCatAIncluded: this.fitoutPredictionInputs.isCatAIncluded,
+        isCatBIncluded: this.fitoutPredictionInputs.isCatBIncluded,
+        sector: this.fitoutPredictionInputs.selectedSector,
       }).then((resp) => resp.data.cost);
     },
 
