@@ -54,7 +54,6 @@ describe('FitoutCostPredictor.vue', () => {
   const getSectorsDisplayedToUser = () => {
     const sectorsDisplayedToUser = [];
     const sectorListElements = wrapper.findAll('.sector-dropdown-list .v-list__tile__title').wrappers;
-    debugger;
     for (const sectorListElement of sectorListElements) {
       sectorsDisplayedToUser.push(sectorListElement.text());
     }

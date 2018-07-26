@@ -1,34 +1,26 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import { cloneDeep } from 'lodash';
 import sectors from '../../store/modules/sectors';
+import { createStandaloneVuexStore } from '../__helpers__/standaloneVuexStoreFactory';
 
-Vue.use(Vuex);
+describe('sectors.js', () => {
+  let testSectors;
+  let storeElements;
 
-const testSectors = ['Retail', 'Financial services', 'Healthcare'];
-const testSectorsInAlphabeticalOrder = ['Financial services', 'Healthcare', 'Retail'];
+  beforeEach(() => {
+    testSectors = ['Retail', 'Financial services', 'Healthcare'];
 
-const sectorsStoreTestState = {
-  sectors: testSectors,
-};
-
-const createVuexStore = () => {
-  const clonedSectorsModule = cloneDeep(sectors);
-  clonedSectorsModule.state = sectorsStoreTestState;
-
-  const store = new Vuex.Store({
-    modules: {
-      clonedSectorsModule,
-    },
+    storeElements = {
+      storeModule: sectors,
+      storeTestState: {
+        sectors: testSectors,
+      },
+    };
   });
-  return store;
-};
 
-describe('sectors.js', () => {  
   describe('Getters passing data', () => {
     it('should get list of sectors in alphabetical order', () => {
-      const store = createVuexStore();
-      expect(store.getters.getSectors).toEqual(testSectorsInAlphabeticalOrder);
+      const store = createStandaloneVuexStore(storeElements);
+      debugger;
+      expect(store.getters.getSectors).toEqual(testSectors.sort());
     });
   });
 });
