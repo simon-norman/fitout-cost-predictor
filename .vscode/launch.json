@@ -57,6 +57,20 @@
             ],
         },
         {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Store Sectors Module Tests",
+            "program": "${workspaceRoot}\\node_modules\\jest\\bin\\jest.js",
+            "args": [
+                "-i",
+                "sectors"
+            ],
+            "internalConsoleOptions": "openOnSessionStart",
+            "outFiles": [
+                "${workspaceRoot}/dist/**/*"
+            ],
+        },
+        {
             "type": "chrome",
             "request": "launch",
             "name": "vuejs: chrome",

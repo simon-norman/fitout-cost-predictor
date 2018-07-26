@@ -17,41 +17,45 @@
           xl3
           @keyup.enter="calculateCostPrediction()"          
         >
-          <v-text-field
-            id="floorAreaInput"
-            v-model="fitoutPredictionInputs.floorArea"
-            :error-messages="floorAreaErrors"
-            type="number"
-            name="floor-area-input"
-            label="Floor area (min. 1000 sq. m.)"/>
-          <v-text-field
-            id="floorHeightInput"
-            v-model="fitoutPredictionInputs.floorHeight"
-            :error-messages="floorHeightErrors"
-            type="number"
-            name="floor-height-input"
-            label="Slab to slab floor height (min. 2.5m)"/>
-          <v-checkbox
-            id="isCatAIncludedInput"
-            :label="`Will this project involve CAT A work?`"
-            v-model="fitoutPredictionInputs.isCatAIncluded"
-            :error="catAcatBErrorsWithoutMessage"
-            class="spacelab-label"
-            hide-details
-          />
-          <v-checkbox
-            id="isCatBIncludedInput"
-            :label="`Will this project involve CAT B work?`"
-            v-model="fitoutPredictionInputs.isCatBIncluded"
-            :error-messages="catAcatBErrorsWithMessage"
-          />
-          <v-select
-            id="sectorSelector"
-            :items="sectorOptions"
-            v-model="fitoutPredictionInputs.selectedSector"
-            content-class="sector-dropdown-list"
-            label="Sector"
-          />
+          <div class="form">
+            <v-text-field
+              id="floorAreaInput"
+              v-model="fitoutPredictionInputs.floorArea"
+              :error-messages="floorAreaErrors"
+              class="floorAreaInput"
+              type="number"
+              name="floor-area-input"
+              label="Floor area (min. 1000 sq. m.)"/>
+            <v-text-field
+              id="floorHeightInput"
+              v-model="fitoutPredictionInputs.floorHeight"
+              :error-messages="floorHeightErrors"
+              type="number"
+              name="floor-height-input"
+              label="Slab to slab floor height (min. 2.5m)"/>
+            <v-checkbox
+              id="isCatAIncludedInput"
+              :label="`Will this project involve CAT A work?`"
+              v-model="fitoutPredictionInputs.isCatAIncluded"
+              :error="catAcatBErrorsWithoutMessage"
+              class="spacelab-label"
+              hide-details
+            />
+            <v-checkbox
+              id="isCatBIncludedInput"
+              :label="`Will this project involve CAT B work?`"
+              v-model="fitoutPredictionInputs.isCatBIncluded"
+              :error-messages="catAcatBErrorsWithMessage"
+            />
+            <v-select
+              id="sectorSelector"
+              :items="sectorOptions"
+              v-model="fitoutPredictionInputs.selectedSector"
+              :error-messages="sectorErrors"
+              content-class="sector-dropdown-list"
+              label="Sector"
+            />
+          </div>
           <v-btn 
             id="calculateCostPrediction"
             class="spacelab-btn"
@@ -90,7 +94,7 @@ export default {
         isCatBIncluded: false,
         selectedSector: '',
       },
-      sectorOptions: ['Financial Services', 'Professional Services'],
+      sectorOptions: [],
       errorMessage: 'So sorry, there\'s been an error - ' +
           'please try again later',
     };    
@@ -132,6 +136,14 @@ export default {
       }
       return false;
     },
+
+    sectorErrors() {
+      const errors = [];
+      if (this.$v.fitoutPredictionInputs.selectedSector.$error) {
+        errors.push('Please select a sector');
+      }
+      return errors;
+    },
   },
 
   validations: {
@@ -159,6 +171,10 @@ export default {
       },
       
       isEitherCatAOrBIncluded: ['fitoutPredictionInputs.isCatAIncluded', 'fitoutPredictionInputs.isCatBIncluded'],
+
+      selectedSector: { 
+        required, 
+      },
     },
   },
   
