@@ -1,52 +1,43 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import { cloneDeep } from 'lodash';
+import { createStandaloneVuexStore } from '../__helpers__/standaloneVuexStoreFactory';
 import alerts from '../../store/modules/alerts';
 
-Vue.use(Vuex);
+describe('alerts.js', () => {
+  let store;
+  let errorStoreTestState;
+  let storeElements;
+  
+  beforeEach(() => {
+    errorStoreTestState = {
+      errorStatus: false,
+      errorMessage: 'noerror',  
+    };
 
-const createAlertsStoreTestState = () => {
-  const alertsStoreTestState = {
-    errorStatus: false,
-    errorMessage: 'noerror',  
-  };
-  return alertsStoreTestState;
-};
+    storeElements = {
+      storeModule: alerts,
+      storeTestState: errorStoreTestState,
+    };
 
-const createVuexStore = () => {
-  const clonedAlertsModule = cloneDeep(alerts);
-  clonedAlertsModule.state = createAlertsStoreTestState();
-  const store = new Vuex.Store({
-    modules: {
-      clonedAlertsModule,
-    },
+    store = createStandaloneVuexStore(storeElements);
   });
-  return store;
-};
 
-describe('alerts.js', () => {  
   describe('Mutations updating correctly', () => {
     it('should update alert status', () => {
-      const store = createVuexStore();
-      expect(store.state.clonedAlertsModule.errorStatus).toBe(false);
+      expect(store.state.storeModule.errorStatus).toBe(false);
       store.commit('UPDATE_ERROR_STATUS', true);    
-      expect(store.state.clonedAlertsModule.errorStatus).toBe(true);
+      expect(store.state.storeModule.errorStatus).toBe(true);
     });
 
     it('should update alert message', () => {
-      const store = createVuexStore();
-      expect(store.state.clonedAlertsModule.errorMessage).toBe('noerror');
+      expect(store.state.storeModule.errorMessage).toBe('noerror');
       store.commit('UPDATE_ERROR_MESSAGE', 'error');    
-      expect(store.state.clonedAlertsModule.errorMessage).toBe('error');
+      expect(store.state.storeModule.errorMessage).toBe('error');
     });
 
     it('should get alert status', () => {
-      const store = createVuexStore();
       expect(store.getters.getErrorStatus).toBe(false); 
     });
 
     it('should get alert message', () => {
-      const store = createVuexStore();
       expect(store.getters.getErrorMessage).toBe('noerror'); 
     });
   });

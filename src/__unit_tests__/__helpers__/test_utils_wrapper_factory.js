@@ -32,12 +32,19 @@ const createdConfiguredLocalVue = () => {
 };
 
 const createWrapper = (vueTestWrapperElements) => {
+  let store;
+
   const configuredLocalVue = createdConfiguredLocalVue();
-  const store = createVuexStore(vueTestWrapperElements.vuexStoreStubs);
+
+  if (vueTestWrapperElements.vuexStoreStubs) {
+    store = createVuexStore(vueTestWrapperElements.vuexStoreStubs);
+  }
+
   const wrapper = mount(vueTestWrapperElements.componentToTest, {
     store,
     localVue: configuredLocalVue,
   });
+
   if (vueTestWrapperElements.componentTestData) {
     wrapper.setData(vueTestWrapperElements.componentTestData);
   }
