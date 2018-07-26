@@ -17,6 +17,12 @@ describe('FitoutCostPredictor.vue', () => {
   let vueTestWrapperElements;
   let costPredictionFloorInputs;
 
+  const stubbedSectors = ['Financial Services', 'Retail'];
+
+  const stubbedVuexGetters = {
+    getSectors: () => stubbedSectors,
+  };
+
   const populateFloorSizeInputs = () => {
     wrapper.find('#floorAreaInput').setValue(costPredictionFloorInputs.floorArea);
     wrapper.find('#floorHeightInput').setValue(costPredictionFloorInputs.floorHeight);
@@ -48,6 +54,7 @@ describe('FitoutCostPredictor.vue', () => {
   const getSectorsDisplayedToUser = () => {
     const sectorsDisplayedToUser = [];
     const sectorListElements = wrapper.findAll('.sector-dropdown-list .v-list__tile__title').wrappers;
+    debugger;
     for (const sectorListElement of sectorListElements) {
       sectorsDisplayedToUser.push(sectorListElement.text());
     }
@@ -57,12 +64,6 @@ describe('FitoutCostPredictor.vue', () => {
   const calculateCostPrediction = async () => {
     wrapper.find('#calculateCostPrediction').trigger('click');
     await wrapper.vm.$nextTick();
-  };
-
-  const stubbedSectors = ['Financial Services', 'Retail'];
-
-  const stubbedGetters = {
-    getSectors: () => stubbedSectors,
   };
 
   beforeEach(() => {
@@ -85,7 +86,7 @@ describe('FitoutCostPredictor.vue', () => {
     vueTestWrapperElements = {
       componentToTest: FitoutCostPredictor,
       vuexStoreStubs: {
-        getters: stubbedGetters,
+        stubbedVuexGetters,
       },
     };
 
@@ -106,8 +107,7 @@ describe('FitoutCostPredictor.vue', () => {
   });
 
   describe('Available input options in prediction form', () => {
-    it.only('should display the sectors available to select', () => {
-      // inject test data into sectors
+    it('should display the sectors available to select', () => {
       const sectorsDisplayedToUser = getSectorsDisplayedToUser();
   
       expect(sectorsDisplayedToUser).toEqual(stubbedSectors);

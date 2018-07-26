@@ -49,7 +49,7 @@
             />
             <v-select
               id="sectorSelector"
-              :items="sectorOptions"
+              :items="getSectors"
               v-model="fitoutPredictionInputs.selectedSector"
               :error-messages="sectorErrors"
               content-class="sector-dropdown-list"
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations, mapGetters } from 'vuex';
 import { required, minValue } from 'vuelidate/lib/validators';
 import FitoutCostPredictorApi from '../api/fitoutCostPredictorApi';
 import { handleError } from '../error_handler/errorHandler';
@@ -94,13 +94,16 @@ export default {
         isCatBIncluded: false,
         selectedSector: '',
       },
-      sectorOptions: [],
       errorMessage: 'So sorry, there\'s been an error - ' +
           'please try again later',
     };    
   },
 
   computed: {
+    ...mapGetters([
+      'getSectors',
+    ]),
+
     buildingVolume() {
       return parseFloat(this.fitoutPredictionInputs.floorArea)
       * parseFloat(this.fitoutPredictionInputs.floorHeight);
