@@ -65,7 +65,7 @@
     "jest-extended": "^0.7.2",
     "jest-vue-preprocessor": "^1.4.0",
     "lodash": "^4.17.10",
-    "nightwatch":"^0.9.21",
+    "nightwatch": "^0.9.21",
     "opn": "^5.1.0",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.3.0",
