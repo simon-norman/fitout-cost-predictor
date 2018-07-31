@@ -19,6 +19,17 @@
     margin-top: 25px;
 }
 
+.cost-total {
+    font-size: 3.5em;
+    margin-bottom: 0.6em;
+    border-bottom: 1px solid rgba(0, 0, 1, 0.25);
+}
+
+.cost-item {
+    font-size: 2em;
+    margin-bottom: 0.4em;
+}
+
 .application-background {
     background: white !important;
 }
