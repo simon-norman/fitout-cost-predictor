@@ -20,7 +20,7 @@
           <div class="form">
             <v-text-field
               id="floorAreaInput"
-              v-model="fitoutPredictionInputs.floorArea"
+              v-model="fitoutCostPredictionInputs.floorArea"
               :error-messages="floorAreaErrors"
               class="floorAreaInput"
               type="number"
@@ -28,29 +28,37 @@
               label="Floor area (min. 10000 sq. ft.)"/>
             <v-text-field
               id="floorHeightInput"
-              v-model="fitoutPredictionInputs.floorHeight"
+              v-model="fitoutCostPredictionInputs.floorHeight"
               :error-messages="floorHeightErrors"
               type="number"
               name="floor-height-input"
               label="Slab to slab floor height (min. 2.5m)"/>
-            <v-checkbox
-              id="isCatAIncludedInput"
-              :label="`Will this project involve CAT A work?`"
-              v-model="fitoutPredictionInputs.isCatAIncluded"
-              :error="catAcatBErrorsWithoutMessage"
-              class="spacelab-label"
-              hide-details
-            />
-            <v-checkbox
-              id="isCatBIncludedInput"
-              :label="`Will this project involve CAT B work?`"
-              v-model="fitoutPredictionInputs.isCatBIncluded"
-              :error-messages="catAcatBErrorsWithMessage"
-            />
+            <v-radio-group 
+              :value="catTypeRadioButtonSelected"
+              :error-messages="catAcatBErrorMessage"
+              label="Fit out category type:"
+              column>
+              <v-radio 
+                class="isCatAIncludedInput"
+                value="catASelected" 
+                label="Cat A"
+                @click="setCatAOnly()"/>
+              <v-radio 
+                id="isCatBIncludedInput"
+                class="isCatBIncludedInput"
+                value="catBSelected" 
+                label="Cat B"
+                @click="setCatBOnly()"/>
+              <v-radio 
+                class="isCatAAndBIncludedInput"
+                value="catAAndBSelected" 
+                label="Cat A and B"
+                @click="setCatAAndB()"/>
+            </v-radio-group>
             <v-select
               id="sectorSelector"
               :items="getSectors"
-              v-model="fitoutPredictionInputs.selectedSector"
+              v-model="fitoutCostPredictionInputs.selectedSector"
               :error-messages="sectorErrors"
               content-class="sector-dropdown-list"
               label="Sector"
@@ -87,7 +95,7 @@ export default {
       fitoutCostPrediction: {
         cost: '',
       },
-      fitoutPredictionInputs: {
+      fitoutCostPredictionInputs: {
         floorArea: '',
         floorHeight: '',
         isCatAIncluded: false,
@@ -106,13 +114,30 @@ export default {
     ]),
 
     buildingVolumeValue() {
-      return parseFloat(this.fitoutPredictionInputs.floorArea)
-      * parseFloat(this.fitoutPredictionInputs.floorHeight);
+      return parseFloat(this.fitoutCostPredictionInputs.floorArea)
+      * parseFloat(this.fitoutCostPredictionInputs.floorHeight);
+    },
+
+    catTypeRadioButtonSelected() {
+      let catTypeSelected;
+
+      if (this.fitoutCostPredictionInputs.isCatAIncluded && 
+      !this.fitoutCostPredictionInputs.isCatBIncluded) {
+        catTypeSelected = 'catASelected';
+      } else if (!this.fitoutCostPredictionInputs.isCatAIncluded && 
+      this.fitoutCostPredictionInputs.isCatBIncluded) {
+        catTypeSelected = 'catBSelected';
+      } else if (this.fitoutCostPredictionInputs.isCatAIncluded && 
+      this.fitoutCostPredictionInputs.isCatBIncluded) {
+        catTypeSelected = 'catAAndBSelected';
+      }
+
+      return catTypeSelected;
     },
 
     floorAreaErrors() {
       const errors = [];
-      if (this.$v.fitoutPredictionInputs.floorArea.$error) {
+      if (this.$v.fitoutCostPredictionInputs.floorArea.$error) {
         errors.push('Please provide a floor area (minimum 10000 sq.ft.)');
       }
       return errors;
@@ -120,30 +145,23 @@ export default {
 
     floorHeightErrors() {
       const errors = [];
-      if (this.$v.fitoutPredictionInputs.floorHeight.$error) {
+      if (this.$v.fitoutCostPredictionInputs.floorHeight.$error) {
         errors.push('Please provide a floor height (minimum 2.5 m.)');
       }
       return errors;
     },
 
-    catAcatBErrorsWithMessage() {
+    catAcatBErrorMessage() {
       const errors = [];
-      if (this.$v.fitoutPredictionInputs.isEitherCatAOrBIncluded.$error) {
-        errors.push('Please select at least one CAT A / CAT B option');
+      if (this.$v.fitoutCostPredictionInputs.isEitherCatAOrBIncluded.$error) {
+        errors.push('Please select the fitout category');
       }
       return errors;
     },
 
-    catAcatBErrorsWithoutMessage() {
-      if (this.$v.fitoutPredictionInputs.isEitherCatAOrBIncluded.$error) {
-        return true;
-      }
-      return false;
-    },
-
     sectorErrors() {
       const errors = [];
-      if (this.$v.fitoutPredictionInputs.selectedSector.$error) {
+      if (this.$v.fitoutCostPredictionInputs.selectedSector.$error) {
         errors.push('Please select a sector');
       }
       return errors;
@@ -151,7 +169,7 @@ export default {
   },
 
   validations: {
-    fitoutPredictionInputs: {
+    fitoutCostPredictionInputs: {
       floorArea: { 
         required,
         minValue: minValue(1000),
@@ -164,17 +182,17 @@ export default {
 
       isCatBIncluded: {
         required(v) {
-          return this.fitoutPredictionInputs.isCatAIncluded || required(v);
+          return this.fitoutCostPredictionInputs.isCatAIncluded || required(v);
         },
       },
 
       isCatAIncluded: {
         required(v) {
-          return this.fitoutPredictionInputs.isCatBIncluded || required(v);
+          return this.fitoutCostPredictionInputs.isCatBIncluded || required(v);
         },
       },
       
-      isEitherCatAOrBIncluded: ['fitoutPredictionInputs.isCatAIncluded', 'fitoutPredictionInputs.isCatBIncluded'],
+      isEitherCatAOrBIncluded: ['fitoutCostPredictionInputs.isCatAIncluded', 'fitoutCostPredictionInputs.isCatBIncluded'],
 
       selectedSector: { 
         required, 
@@ -214,9 +232,9 @@ export default {
           buildingVolumeValue: this.buildingVolumeValue,
           buildingVolumeUnit: this.buildingVolumeUnit,
         },
-        isCatAIncluded: this.fitoutPredictionInputs.isCatAIncluded,
-        isCatBIncluded: this.fitoutPredictionInputs.isCatBIncluded,
-        sector: this.fitoutPredictionInputs.selectedSector,
+        isCatAIncluded: this.fitoutCostPredictionInputs.isCatAIncluded,
+        isCatBIncluded: this.fitoutCostPredictionInputs.isCatBIncluded,
+        sector: this.fitoutCostPredictionInputs.selectedSector,
       }).then((resp) => resp.data.cost);
     },
 
@@ -243,6 +261,21 @@ export default {
     formatCostInMillions(costFormattedAsNumber) {
       const costFormattedToTwoDecimals = costFormattedAsNumber.toFixed(2);
       return `£${costFormattedToTwoDecimals}m`;
+    },
+
+    setCatAOnly() {
+      this.fitoutCostPredictionInputs.isCatAIncluded = true;
+      this.fitoutCostPredictionInputs.isCatBIncluded = false;
+    },
+
+    setCatBOnly() {
+      this.fitoutCostPredictionInputs.isCatAIncluded = false;
+      this.fitoutCostPredictionInputs.isCatBIncluded = true;
+    },
+
+    setCatAAndB() {
+      this.fitoutCostPredictionInputs.isCatAIncluded = true;
+      this.fitoutCostPredictionInputs.isCatBIncluded = true;
     },
   },
 };

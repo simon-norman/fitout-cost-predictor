@@ -29,8 +29,7 @@ describe('FitoutCostPredictor.vue', () => {
   };
 
   const populateCatABInputs = () => {
-    wrapper.find('#isCatAIncludedInput').trigger('click');
-    wrapper.find('#isCatBIncludedInput').trigger('click');
+    wrapper.find('.isCatAAndBIncludedInput .v-input--selection-controls__ripple').trigger('click');
   };
 
   const populateSectorInput = () => {
@@ -152,8 +151,8 @@ describe('FitoutCostPredictor.vue', () => {
 
   describe('Prediction parameters form validation', () => {
     it('should display error message and not call api if FLOOR AREA or FLOOR HEIGHT are not inputted', async () => {
-      expect(wrapper.vm.$v.fitoutPredictionInputs.floorArea.$error).toBeFalse();
-      expect(wrapper.vm.$v.fitoutPredictionInputs.floorHeight.$error).toBeFalse();
+      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorArea.$error).toBeFalse();
+      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorHeight.$error).toBeFalse();
       
       populateCatABInputs();
       populateSectorInput();
@@ -161,13 +160,13 @@ describe('FitoutCostPredictor.vue', () => {
       await calculateCostPrediction();
 
       expect(mockAxios.post).not.toHaveBeenCalled();
-      expect(wrapper.vm.$v.fitoutPredictionInputs.floorArea.$error).toBeTrue();
-      expect(wrapper.vm.$v.fitoutPredictionInputs.floorHeight.$error).toBeTrue();
+      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorArea.$error).toBeTrue();
+      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorHeight.$error).toBeTrue();
     });
 
     it('should display error message and not call api if FLOOR AREA or FLOOR HEIGHT are below minimum values', async () => {
-      expect(wrapper.vm.$v.fitoutPredictionInputs.floorArea.$error).toBeFalse();
-      expect(wrapper.vm.$v.fitoutPredictionInputs.floorHeight.$error).toBeFalse();
+      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorArea.$error).toBeFalse();
+      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorHeight.$error).toBeFalse();
 
       costPredictionFloorInputs.floorArea = 999.9999;
       costPredictionFloorInputs.floorHeight = 2.49;
@@ -176,8 +175,8 @@ describe('FitoutCostPredictor.vue', () => {
       await calculateCostPrediction();
       
       expect(mockAxios.post).not.toHaveBeenCalled();
-      expect(wrapper.vm.$v.fitoutPredictionInputs.floorArea.$error).toBeTrue();
-      expect(wrapper.vm.$v.fitoutPredictionInputs.floorHeight.$error).toBeTrue();
+      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorArea.$error).toBeTrue();
+      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorHeight.$error).toBeTrue();
     });
     
     it('should display error message and not call api if BOTH Cat A and Cat B options are NOT selected', async () => {
@@ -187,8 +186,8 @@ describe('FitoutCostPredictor.vue', () => {
       await calculateCostPrediction();
       
       expect(mockAxios.post).not.toHaveBeenCalled();
-      expect(wrapper.vm.$v.fitoutPredictionInputs.isCatAIncluded.$error).toBeTrue();
-      expect(wrapper.vm.$v.fitoutPredictionInputs.isCatBIncluded.$error).toBeTrue();
+      expect(wrapper.vm.$v.fitoutCostPredictionInputs.isCatAIncluded.$error).toBeTrue();
+      expect(wrapper.vm.$v.fitoutCostPredictionInputs.isCatBIncluded.$error).toBeTrue();
     });
 
     it('should display error message and not call api if sector is not selected', async () => {
@@ -198,7 +197,7 @@ describe('FitoutCostPredictor.vue', () => {
       await calculateCostPrediction();
       
       expect(mockAxios.post).not.toHaveBeenCalled();
-      expect(wrapper.vm.$v.fitoutPredictionInputs.selectedSector.$error).toBeTrue();
+      expect(wrapper.vm.$v.fitoutCostPredictionInputs.selectedSector.$error).toBeTrue();
     });
   });
 

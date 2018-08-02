@@ -16,13 +16,13 @@
     "axios": "^0.18.0",
     "firebase": "^5.2.0",
     "firebase-admin": "^1.2.0",
-    "firebase-tools": "^3.19.3",
     "firebase-functions": "^1.1.0",
+    "firebase-tools": "^3.19.3",
     "vue": "^2.5.2",
     "vue-analytics": "^5.12.2",
     "vue-router": "^3.0.1",
     "vuelidate": "^0.6.2",
-    "vuetify": "^1.1.2",
+    "vuetify": "^1.1.9",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
