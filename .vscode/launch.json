@@ -31,6 +31,20 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Debug Building Volume inputs test",
+            "program": "${workspaceRoot}\\node_modules\\jest\\bin\\jest.js",
+            "args": [
+                "-i",
+                "BuildingVolume.spec.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart",
+            "outFiles": [
+                "${workspaceRoot}/dist/**/*"
+            ],
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Debug Alert Tests",
             "program": "${workspaceRoot}\\node_modules\\jest\\bin\\jest.js",
             "args": [
@@ -50,6 +64,20 @@
             "args": [
                 "-i",
                 "alerts"
+            ],
+            "internalConsoleOptions": "openOnSessionStart",
+            "outFiles": [
+                "${workspaceRoot}/dist/**/*"
+            ],
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Store Building Volume Module Tests",
+            "program": "${workspaceRoot}\\node_modules\\jest\\bin\\jest.js",
+            "args": [
+                "-i",
+                "buildingVolumeStoreModule.spec.js"
             ],
             "internalConsoleOptions": "openOnSessionStart",
             "outFiles": [

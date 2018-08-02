@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import mockAxios from 'axios';
 import testUtilsWrapperFactory from '../__helpers__/test_utils_wrapper_factory';
-import FitoutCostPredictor from '../../components/FitoutCostPredictor.vue';
+import FitoutCostPredictor from '../../components/FitoutCostPredictorInputForm/FitoutCostPredictor.vue';
 import alerts from './../../store/modules/alerts';
 
 jest.mock('./../../store/modules/alerts');

@@ -81,14 +81,19 @@
 <script>
 import { mapMutations, mapGetters } from 'vuex';
 import { required, minValue } from 'vuelidate/lib/validators';
-import FitoutCostPredictorApi from '../api/fitoutCostPredictorApi';
-import { handleError } from '../error_handler/errorHandler';
-import ErrorWithCustomMsgToUser from '../error/errorWithCustomMsgToUser';
+import FitoutCostPredictorApi from '../../api/fitoutCostPredictorApi';
+import { handleError } from '../../error_handler/errorHandler';
+import ErrorWithCustomMsgToUser from '../../error/errorWithCustomMsgToUser';
+import BuildingVolume from './BuildingVolume.vue';
 
 const fitoutCostPredictorApi = new FitoutCostPredictorApi();
 
 export default {
   name: 'FitoutCostPredictor',
+
+  components: {
+    BuildingVolume,
+  },
 
   data() {
     return {
