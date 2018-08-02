@@ -25,7 +25,7 @@
               class="floorAreaInput"
               type="number"
               name="floor-area-input"
-              label="Floor area (min. 1000 sq. m.)"/>
+              label="Floor area (min. 10000 sq. ft.)"/>
             <v-text-field
               id="floorHeightInput"
               v-model="fitoutPredictionInputs.floorHeight"
@@ -94,6 +94,7 @@ export default {
         isCatBIncluded: false,
         selectedSector: '',
       },
+      buildingVolumeUnit: 'cubic foot',
       errorMessage: 'So sorry, there\'s been an error - ' +
           'please try again later',
     };    
@@ -104,7 +105,7 @@ export default {
       'getSectors',
     ]),
 
-    buildingVolume() {
+    buildingVolumeValue() {
       return parseFloat(this.fitoutPredictionInputs.floorArea)
       * parseFloat(this.fitoutPredictionInputs.floorHeight);
     },
@@ -112,7 +113,7 @@ export default {
     floorAreaErrors() {
       const errors = [];
       if (this.$v.fitoutPredictionInputs.floorArea.$error) {
-        errors.push('Please provide a floor area (minimum 1000 sq.m.)');
+        errors.push('Please provide a floor area (minimum 10000 sq.ft.)');
       }
       return errors;
     },
@@ -209,7 +210,10 @@ export default {
 
     getCostPrediction() {
       return fitoutCostPredictorApi.getFitoutCostPrediction({
-        buildingVolume: this.buildingVolume,
+        buildingVolume: {
+          buildingVolumeValue: this.buildingVolumeValue,
+          buildingVolumeUnit: this.buildingVolumeUnit,
+        },
         isCatAIncluded: this.fitoutPredictionInputs.isCatAIncluded,
         isCatBIncluded: this.fitoutPredictionInputs.isCatBIncluded,
         sector: this.fitoutPredictionInputs.selectedSector,

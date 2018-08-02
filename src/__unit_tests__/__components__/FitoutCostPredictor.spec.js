@@ -72,8 +72,11 @@ describe('FitoutCostPredictor.vue', () => {
     };
 
     costPredictionParametersExpectedToBePassedToApi = {
-      buildingVolume: parseFloat(costPredictionFloorInputs.floorArea) * 
-      parseFloat(costPredictionFloorInputs.floorHeight),
+      buildingVolume: {
+        buildingVolumeValue: parseFloat(costPredictionFloorInputs.floorArea) * 
+          parseFloat(costPredictionFloorInputs.floorHeight),
+        buildingVolumeUnit: 'cubic foot',
+      },
       isCatAIncluded: true,
       isCatBIncluded: true,
     };
@@ -114,7 +117,7 @@ describe('FitoutCostPredictor.vue', () => {
   });
 
   describe('Predict cost', () => {
-    it('should call the cost predictor API with the data (e.g. floor area) needed to make prediction', async () => {
+    it('should call the cost predictor API with the data (e.g. building volume) needed to make prediction', async () => {
       fullyPopulatePredictionForm();
 
       await calculateCostPrediction();
