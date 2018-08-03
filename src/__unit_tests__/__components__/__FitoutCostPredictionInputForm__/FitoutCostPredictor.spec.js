@@ -1,11 +1,11 @@
 
 import Vue from 'vue';
 import mockAxios from 'axios';
-import testUtilsWrapperFactory from '../__helpers__/test_utils_wrapper_factory';
-import FitoutCostPredictor from '../../components/FitoutCostPredictorInputForm/FitoutCostPredictor.vue';
-import alerts from './../../store/modules/alerts';
+import testUtilsWrapperFactory from '../../__helpers__/test_utils_wrapper_factory';
+import FitoutCostPredictor from '../../../components/FitoutCostPredictorInputForm/FitoutCostPredictor.vue';
+import alerts from './../../../store/modules/alerts';
 
-jest.mock('./../../store/modules/alerts');
+jest.mock('./../../../store/modules/alerts');
 
 jest.mock('axios');
 Vue.config.silent = true;
@@ -15,7 +15,6 @@ describe('FitoutCostPredictor.vue', () => {
   let calculatedCostPrediction;
   let costPredictionParametersExpectedToBePassedToApi;
   let vueTestWrapperElements;
-  let costPredictionFloorInputs;
 
   const stubbedSectors = ['Financial Services', 'Retail'];
 
@@ -27,7 +26,7 @@ describe('FitoutCostPredictor.vue', () => {
     getFitoutCategory: () => ({ isCatAIncluded: true, isCatBIncluded: false }),
   };
 
-  const populateCatABInputs = () => {
+  const selectCatAAndBInput = () => {
     wrapper.find('.isCatAAndBIncludedInput .v-input--selection-controls__ripple').trigger('click');
   };
 
@@ -37,7 +36,7 @@ describe('FitoutCostPredictor.vue', () => {
   };
 
   const fullyPopulatePredictionForm = () => {
-    populateCatABInputs();
+    selectCatAAndBInput();
     populateSectorInput();
   };
 
@@ -141,7 +140,7 @@ describe('FitoutCostPredictor.vue', () => {
 
   describe('Prediction parameters form validation', () => {    
     it('should display error message and not call api if sector is not selected', async () => {
-      populateCatABInputs();
+      selectCatAAndBInput();
 
       await calculateCostPrediction();
       

@@ -14,13 +14,13 @@ const mutations = {
 };
   
 const getters = {
-  getAreVolumeInputsDirty: state => state.areVolumeInputsDirty,
-
-  getIsBuildingVolumeInvalid: state => state.isBuildingVolumeInvalid,
-
   getBuildingVolumeValue: state => state.buildingVolumeValue,
 
   getBuildingVolumeUnit: state => state.buildingVolumeUnit,
+
+  getIsBuildingVolumeInvalid: state => state.isBuildingVolumeInvalid,
+
+  getAreVolumeInputsDirty: state => state.areVolumeInputsDirty,
 };
   
 const state = {

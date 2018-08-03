@@ -29,9 +29,6 @@ export default {
     return {
       floorArea: '',
       floorHeight: '',
-      buildingVolumeUnit: 'cubic foot',
-      errorMessage: 'So sorry, there\'s been an error - ' +
-          'please try again later',
     };    
   },
 
@@ -62,6 +59,18 @@ export default {
     },
   },
 
+  validations: {
+    floorArea: { 
+      required,
+      minValue: minValue(10000),
+    },
+      
+    floorHeight: { 
+      required, 
+      minValue: minValue(2.5), 
+    },
+  },
+
   watch: {
     buildingVolumeValue: function (newBuildingVolumeValue) {
       this.UPDATE_BUILDING_VOLUME_VALUE(newBuildingVolumeValue);
@@ -78,18 +87,6 @@ export default {
 
   created() {
     this.UPDATE_IS_BUILDING_VOLUME_INVALID(this.$v.$invalid);
-  },
-
-  validations: {
-    floorArea: { 
-      required,
-      minValue: minValue(10000),
-    },
-      
-    floorHeight: { 
-      required, 
-      minValue: minValue(2.5), 
-    },
   },
   
   methods: {

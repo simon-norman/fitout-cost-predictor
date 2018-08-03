@@ -11,7 +11,6 @@
         label="Cat A"
         @click="UPDATE_CAT_A_INCLUDED()"/>
       <v-radio 
-        id="isCatBIncludedInput"
         class="isCatBIncludedInput"
         value="catBSelected" 
         label="Cat B"
@@ -32,22 +31,11 @@ import { required } from 'vuelidate/lib/validators';
 export default {
   name: 'FitoutCategory',
 
-  data() {
-    return {
-    };
-  },
-
   computed: {
     ...mapGetters([
       'getAreFitoutCategoryInputsDirty',
       'getFitoutCategory',
     ]),
-
-    fitoutCategory: {
-      get() {
-        return this.getFitoutCategory;
-      },
-    },
 
     catTypeRadioButtonSelected() {
       let catTypeSelected;
@@ -66,6 +54,12 @@ export default {
       return catTypeSelected;
     },
 
+    fitoutCategory: {
+      get() {
+        return this.getFitoutCategory;
+      },
+    },
+
     catAcatBErrorMessage() {
       const errors = [];
       if (this.$v.isEitherCatAOrBIncluded.$error) {
@@ -73,22 +67,6 @@ export default {
       }
       return errors;
     },
-  },
-
-  watch: {
-    fitoutCategory: function (newFitoutCategory) {
-      this.UPDATE_IS_FITOUT_CATEGORY_INVALID(this.$v.$invalid);
-    },
-
-    getAreFitoutCategoryInputsDirty: function (newAreFitoutCategoryInputsDirty) {
-      if (newAreFitoutCategoryInputsDirty) {
-        this.$v.$touch();
-      }
-    },
-  },
-
-  created() {
-    this.UPDATE_IS_FITOUT_CATEGORY_INVALID(this.$v.$invalid);
   },
 
   validations: {
@@ -105,6 +83,22 @@ export default {
     },
       
     isEitherCatAOrBIncluded: ['isCatAIncluded', 'isCatBIncluded'],
+  },
+
+  watch: {
+    fitoutCategory: function () {
+      this.UPDATE_IS_FITOUT_CATEGORY_INVALID(this.$v.$invalid);
+    },
+
+    getAreFitoutCategoryInputsDirty: function (newAreFitoutCategoryInputsDirty) {
+      if (newAreFitoutCategoryInputsDirty) {
+        this.$v.$touch();
+      }
+    },
+  },
+
+  created() {
+    this.UPDATE_IS_FITOUT_CATEGORY_INVALID(this.$v.$invalid);
   },
 
   methods: {

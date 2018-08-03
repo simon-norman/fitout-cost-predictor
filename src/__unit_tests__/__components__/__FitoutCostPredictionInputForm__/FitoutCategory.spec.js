@@ -10,9 +10,7 @@ Vue.config.silent = true;
 
 describe('FitoutCategory.vue', () => {
   let wrapper;
-  let stubbedVuexMutations;
   let vueTestWrapperElements;
-  let costPredictionFloorInputs;
 
   const populateCatABInputs = () => {
     wrapper.find('.isCatAAndBIncludedInput .v-input--selection-controls__ripple').trigger('click');

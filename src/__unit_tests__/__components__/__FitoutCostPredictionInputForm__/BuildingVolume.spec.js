@@ -10,7 +10,6 @@ Vue.config.silent = true;
 
 describe('BuildingVolume.vue', () => {
   let wrapper;
-  let stubbedVuexMutations;
   let vueTestWrapperElements;
   let costPredictionFloorInputs;
 

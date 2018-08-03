@@ -19,7 +19,6 @@ describe('sectors.js', () => {
   describe('Getters passing data', () => {
     it('should get list of sectors in alphabetical order', () => {
       const store = createStandaloneVuexStore(storeElements);
-      debugger;
       expect(store.getters.getSectors).toEqual(testSectors.sort());
     });
   });

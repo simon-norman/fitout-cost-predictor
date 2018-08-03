@@ -25,11 +25,11 @@ const mutations = {
 };
   
 const getters = {
+  getFitoutCategory: state => state.fitoutCategory,
+
   getAreFitoutCategoryInputsDirty: state => state.areFitoutCategoryInputsDirty,
 
   getIsFitoutCategoryInvalid: state => state.isFitoutCategoryInvalid,
-
-  getFitoutCategory: state => state.fitoutCategory,
 };
   
 const state = {

@@ -37,7 +37,6 @@ module.exports = {
     "func-names": 0,
     "no-param-reassign": 0,
     "import/no-extraneous-dependencies": 0,
-    "no-unused-vars": 0,
     "object-shorthand": 0,
     "prefer-destructuring": ["error", {
       "AssignmentExpression": {

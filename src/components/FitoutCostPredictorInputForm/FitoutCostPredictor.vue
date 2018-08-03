@@ -45,7 +45,7 @@
 
 <script>
 import { mapMutations, mapGetters } from 'vuex';
-import { required, minValue } from 'vuelidate/lib/validators';
+import { required } from 'vuelidate/lib/validators';
 import FitoutCostPredictorApi from '../../api/fitoutCostPredictorApi';
 import { handleError } from '../../error_handler/errorHandler';
 import ErrorWithCustomMsgToUser from '../../error/errorWithCustomMsgToUser';
@@ -70,18 +70,17 @@ export default {
       fitoutCostPredictionInputs: {
         selectedSector: '',
       },
-      errorMessage: 'So sorry, there\'s been an error - ' +
-          'please try again later',
     };    
   },
 
   computed: {
     ...mapGetters([
-      'getSectors',
       'getBuildingVolumeValue',
       'getBuildingVolumeUnit',
       'getIsBuildingVolumeInvalid',
       'getFitoutCategory',
+      'getIsFitoutCategoryInvalid',
+      'getSectors',
     ]),
 
     sectorErrors() {
@@ -111,7 +110,9 @@ export default {
     ]),
 
     async calculateCostPrediction() {
+      this.setPredictionFormToDirty();
       if (this.arePredictionParametersValid()) {
+        this.setPredictionFormToClean();
         try {
           const cost = await this.getCostPrediction();
           this.fitoutCostPrediction.cost = this.formatCost(cost);
@@ -121,23 +122,23 @@ export default {
       }
     },
 
-    arePredictionParametersValid() {
+    setPredictionFormToDirty() {
       this.$v.$touch();
-      this.setPredictionFormToDirty();
-      if (!this.$v.$error && !this.getIsBuildingVolumeInvalid) {
-        this.$v.$reset();
-        this.setPredictionFormToClean();
+      this.UPDATE_ARE_VOLUME_INPUTS_DIRTY(true);
+      this.UPDATE_FITOUT_CATEGORY_INPUTS_DIRTY(true);
+    },
+
+    arePredictionParametersValid() {
+      if (!this.$v.$invalid && 
+        !this.getIsBuildingVolumeInvalid && 
+        !this.getIsFitoutCategoryInvalid) {
         return true;
       }
       return false;
     },
 
-    setPredictionFormToDirty() {
-      this.UPDATE_ARE_VOLUME_INPUTS_DIRTY(true);
-      this.UPDATE_FITOUT_CATEGORY_INPUTS_DIRTY(true);
-    },
-
     setPredictionFormToClean() {
+      this.$v.$reset();
       this.UPDATE_ARE_VOLUME_INPUTS_DIRTY(false);
       this.UPDATE_FITOUT_CATEGORY_INPUTS_DIRTY(false);
     },
