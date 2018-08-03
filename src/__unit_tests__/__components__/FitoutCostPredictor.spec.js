@@ -21,11 +21,10 @@ describe('FitoutCostPredictor.vue', () => {
 
   const stubbedVuexGetters = {
     getSectors: () => stubbedSectors,
-  };
-
-  const populateFloorSizeInputs = () => {
-    wrapper.find('#floorAreaInput').setValue(costPredictionFloorInputs.floorArea);
-    wrapper.find('#floorHeightInput').setValue(costPredictionFloorInputs.floorHeight);
+    getBuildingVolumeValue: () => 100000,
+    getBuildingVolumeUnit: () => 'Square foot',
+    getIsBuildingVolumeInvalid: () => false,
+    getFitoutCategory: () => ({ isCatAIncluded: true, isCatBIncluded: false }),
   };
 
   const populateCatABInputs = () => {
@@ -38,10 +37,7 @@ describe('FitoutCostPredictor.vue', () => {
   };
 
   const fullyPopulatePredictionForm = () => {
-    populateFloorSizeInputs(); 
-
     populateCatABInputs();
-
     populateSectorInput();
   };
 
@@ -65,19 +61,13 @@ describe('FitoutCostPredictor.vue', () => {
   };
 
   beforeEach(() => {
-    costPredictionFloorInputs = {
-      floorArea: '1000',
-      floorHeight: '2.5',
-    };
-
     costPredictionParametersExpectedToBePassedToApi = {
       buildingVolume: {
-        buildingVolumeValue: parseFloat(costPredictionFloorInputs.floorArea) * 
-          parseFloat(costPredictionFloorInputs.floorHeight),
-        buildingVolumeUnit: 'cubic foot',
+        buildingVolumeValue: stubbedVuexGetters.getBuildingVolumeValue(),
+        buildingVolumeUnit: stubbedVuexGetters.getBuildingVolumeUnit(),
       },
-      isCatAIncluded: true,
-      isCatBIncluded: true,
+      isCatAIncluded: stubbedVuexGetters.getFitoutCategory().isCatAIncluded,
+      isCatBIncluded: stubbedVuexGetters.getFitoutCategory().isCatBIncluded,
     };
 
     calculatedCostPrediction = { 
@@ -149,49 +139,8 @@ describe('FitoutCostPredictor.vue', () => {
     });
   });
 
-  describe('Prediction parameters form validation', () => {
-    it('should display error message and not call api if FLOOR AREA or FLOOR HEIGHT are not inputted', async () => {
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorArea.$error).toBeFalse();
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorHeight.$error).toBeFalse();
-      
-      populateCatABInputs();
-      populateSectorInput();
-
-      await calculateCostPrediction();
-
-      expect(mockAxios.post).not.toHaveBeenCalled();
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorArea.$error).toBeTrue();
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorHeight.$error).toBeTrue();
-    });
-
-    it('should display error message and not call api if FLOOR AREA or FLOOR HEIGHT are below minimum values', async () => {
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorArea.$error).toBeFalse();
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorHeight.$error).toBeFalse();
-
-      costPredictionFloorInputs.floorArea = 999.9999;
-      costPredictionFloorInputs.floorHeight = 2.49;
-      fullyPopulatePredictionForm();
-
-      await calculateCostPrediction();
-      
-      expect(mockAxios.post).not.toHaveBeenCalled();
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorArea.$error).toBeTrue();
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorHeight.$error).toBeTrue();
-    });
-    
-    it('should display error message and not call api if BOTH Cat A and Cat B options are NOT selected', async () => {
-      populateFloorSizeInputs();
-      populateSectorInput();
-
-      await calculateCostPrediction();
-      
-      expect(mockAxios.post).not.toHaveBeenCalled();
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.isCatAIncluded.$error).toBeTrue();
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.isCatBIncluded.$error).toBeTrue();
-    });
-
+  describe('Prediction parameters form validation', () => {    
     it('should display error message and not call api if sector is not selected', async () => {
-      populateFloorSizeInputs();
       populateCatABInputs();
 
       await calculateCostPrediction();

@@ -10,6 +10,7 @@ Vue.config.silent = true;
 
 describe('BuildingVolume.vue', () => {
   let wrapper;
+  let stubbedVuexMutations;
   let vueTestWrapperElements;
   let costPredictionFloorInputs;
 
@@ -19,6 +20,8 @@ describe('BuildingVolume.vue', () => {
   };
 
   beforeEach(() => {
+    jest.clearAllMocks();
+    
     costPredictionFloorInputs = {
       floorArea: '10000',
       floorHeight: '2.5',
@@ -26,6 +29,10 @@ describe('BuildingVolume.vue', () => {
 
     vueTestWrapperElements = {
       componentToTest: BuildingVolume,
+      vuexStoreStubs: {
+        stubbedVuexMutations: buildingVolumeStoreModule.mutations,
+        stubbedVuexGetters: buildingVolumeStoreModule.getters,
+      },
     };
 
     wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
@@ -38,44 +45,54 @@ describe('BuildingVolume.vue', () => {
   });
 
   describe('Update Vuex store with building volume', () => {
-    it.only('should update the Vuex store with the building volume', async () => {
+    it('should update the Vuex store with the building volume', async () => {
       populateFloorSizeInputs();
-      debugger;
+
+      const indexOfFinalCallToUpdateVolume = buildingVolumeStoreModule.mutations
+        .UPDATE_BUILDING_VOLUME_VALUE.mock.calls.length - 1;
+
       expect(buildingVolumeStoreModule.mutations
-        .UPDATE_BUILDING_VOLUME_VALUE.mock.calls[0][1]).toEqual(true);
+        .UPDATE_BUILDING_VOLUME_VALUE.mock.calls[indexOfFinalCallToUpdateVolume][1]).toBe(25000);
     });
   });
 
-/*   describe('Prediction parameters form validation', () => {
-    it('should display error message and not call api if FLOOR AREA 
-    or FLOOR HEIGHT are not inputted', async () => {
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorArea.$error).toBeFalse();
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorHeight.$error).toBeFalse();
-      
-      populateCatABInputs();
-      populateSectorInput();
+  describe('Validate building dimensions inputs', () => {
+    const getFinalCallMadeToUpdateVolumeValidStatus = () => {
+      const indexOfFinalUpdateCall = buildingVolumeStoreModule.mutations
+        .UPDATE_IS_BUILDING_VOLUME_INVALID.mock.calls.length - 1;
 
-      await calculateCostPrediction();
+      const finalCall = buildingVolumeStoreModule.mutations
+        .UPDATE_IS_BUILDING_VOLUME_INVALID.mock.calls[indexOfFinalUpdateCall];
 
-      expect(mockAxios.post).not.toHaveBeenCalled();
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorArea.$error).toBeTrue();
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorHeight.$error).toBeTrue();
-    });
+      return finalCall;
+    }; 
 
-    it('should display error message and not call api 
-    if FLOOR AREA or FLOOR HEIGHT are below minimum values', async () => {
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorArea.$error).toBeFalse();
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorHeight.$error).toBeFalse();
+    it('should set the building volume as invalid', async () => {
+      expect(buildingVolumeStoreModule.mutations
+        .UPDATE_IS_BUILDING_VOLUME_INVALID.mock.calls[0][1]).toBe(true);
 
-      costPredictionFloorInputs.floorArea = 999.9999;
+      costPredictionFloorInputs.floorArea = 9999.9999;
       costPredictionFloorInputs.floorHeight = 2.49;
-      fullyPopulatePredictionForm();
-
-      await calculateCostPrediction();
+  
+      populateFloorSizeInputs();
       
-      expect(mockAxios.post).not.toHaveBeenCalled();
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorArea.$error).toBeTrue();
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.floorHeight.$error).toBeTrue();
+      expect(getFinalCallMadeToUpdateVolumeValidStatus()[1]).toBe(true);
     });
-  }); */
+
+    it('should set the building volume as valid', async () => {
+      populateFloorSizeInputs();
+      
+      expect(getFinalCallMadeToUpdateVolumeValidStatus()[1]).toBe(false);
+    });
+
+    it('should display invalid floor area and floor height error message if inputs set to dirty', async () => {
+      expect(wrapper.vm.$v.floorArea.$error).toBeFalse();
+      expect(wrapper.vm.$v.floorHeight.$error).toBeFalse();
+
+      wrapper.vm.$options.watch.getAreVolumeInputsDirty.call(wrapper.vm, true); 
+
+      expect(wrapper.vm.$v.floorArea.$error).toBeTrue();
+      expect(wrapper.vm.$v.floorHeight.$error).toBeTrue();
+    });
+  });
 });

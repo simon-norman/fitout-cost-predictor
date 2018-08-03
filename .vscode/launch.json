@@ -45,6 +45,20 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Debug Fitout Category inputs test",
+            "program": "${workspaceRoot}\\node_modules\\jest\\bin\\jest.js",
+            "args": [
+                "-i",
+                "FitoutCategory.spec.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart",
+            "outFiles": [
+                "${workspaceRoot}/dist/**/*"
+            ],
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Debug Alert Tests",
             "program": "${workspaceRoot}\\node_modules\\jest\\bin\\jest.js",
             "args": [
@@ -78,6 +92,20 @@
             "args": [
                 "-i",
                 "buildingVolumeStoreModule.spec.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart",
+            "outFiles": [
+                "${workspaceRoot}/dist/**/*"
+            ],
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Store Fitout Category Type Module Tests",
+            "program": "${workspaceRoot}\\node_modules\\jest\\bin\\jest.js",
+            "args": [
+                "-i",
+                "fitoutCategoryStoreModule.spec.js"
             ],
             "internalConsoleOptions": "openOnSessionStart",
             "outFiles": [
