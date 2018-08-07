@@ -3,7 +3,6 @@ import buildingVolumeStoreModule from '../../store/modules/buildingVolumeStoreMo
 
 describe('buildingVolume.js', () => {
   let store;
-  let buildingVolumeStoreTestState;
   let storeElements;
   
   beforeEach(() => {
@@ -16,10 +15,16 @@ describe('buildingVolume.js', () => {
   });
 
   describe('Mutations updating correctly', () => {
-    it('should update building volume', () => {
-      expect(store.state.storeModule.buildingVolumeValue).toBe('');
-      store.commit('UPDATE_BUILDING_VOLUME_VALUE', 30000);    
-      expect(store.state.storeModule.buildingVolumeValue).toBe(30000);
+    it('should update and get average floor height', () => {
+      expect(store.getters.getAverageFloorHeightValue).toBe('');
+      store.commit('UPDATE_AVERAGE_FLOOR_HEIGHT', 3);    
+      expect(store.getters.getAverageFloorHeightValue).toBe(3);
+    });
+
+    it('should update and get floor area', () => {
+      expect(store.getters.getFloorAreaValue).toBe('');
+      store.commit('UPDATE_FLOOR_AREA', 30000);    
+      expect(store.getters.getFloorAreaValue).toBe(30000);
     });
 
     it('should update if building volume is valid', () => {
@@ -31,22 +36,22 @@ describe('buildingVolume.js', () => {
 
   describe('Getters returning expected data', () => {
     it('should return if building volume form is dirty', () => {
-      buildingVolumeStoreModule.state.areVolumeInputsDirty = true;
+      store.state.storeModule.areVolumeInputsDirty = true;
       expect(store.getters.getAreVolumeInputsDirty).toBe(true); 
     });
 
-    it('should return building volume value', () => {
-      buildingVolumeStoreModule.state.buildingVolumeValue = 10000;
-      expect(store.getters.getBuildingVolumeValue).toBe(10000); 
+    it('should return building area unit', () => {
+      store.state.storeModule.floorArea.areaUnit = 'sq_ft';
+      expect(store.getters.getFloorAreaUnit).toBe('sq_ft'); 
     });
 
-    it('should return building volume unit', () => {
-      buildingVolumeStoreModule.state.buildingVolumeUnit = 'Cubic metre';
-      expect(store.getters.getBuildingVolumeUnit).toBe('Cubic metre'); 
+    it('should return floor height unit', () => {
+      store.state.storeModule.averageFloorHeight.heightUnit = 'ft';
+      expect(store.getters.getAverageFloorHeightUnit).toBe('ft'); 
     });
 
     it('should return building volume is valid', () => {
-      buildingVolumeStoreModule.state.isBuildingVolumeInvalid = true;
+      store.state.storeModule.isBuildingVolumeInvalid = true;
       expect(store.getters.getIsBuildingVolumeInvalid).toBe(true); 
     });
   });

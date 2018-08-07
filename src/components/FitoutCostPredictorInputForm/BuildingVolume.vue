@@ -9,9 +9,9 @@
       name="floor-area-input"
       label="Floor area (min. 10000 sq. ft.)"/>
     <v-text-field
-      id="floorHeightInput"
-      v-model="floorHeight"
-      :error-messages="floorHeightErrors"
+      id="averageFloorHeightInput"
+      v-model="averageFloorHeight"
+      :error-messages="averageFloorHeightErrors"
       type="number"
       name="floor-height-input"
       label="Slab to slab floor height (min. 2.5m)"/>
@@ -25,21 +25,33 @@ import { required, minValue } from 'vuelidate/lib/validators';
 export default {
   name: 'BuildingVolume',
 
-  data() {
-    return {
-      floorArea: '',
-      floorHeight: '',
-    };    
-  },
-
   computed: {
     ...mapGetters([
+      'getFloorAreaValue',
+      'getAverageFloorHeightValue',
       'getAreVolumeInputsDirty',
     ]),
 
-    buildingVolumeValue() {
-      return parseFloat(this.floorArea)
-      * parseFloat(this.floorHeight);
+    floorArea: {
+      set(floorArea) {
+        this.UPDATE_FLOOR_AREA(floorArea);
+        this.UPDATE_IS_BUILDING_VOLUME_INVALID(this.$v.$invalid);
+      },
+
+      get() {
+        return this.getFloorAreaValue;
+      },
+    },
+
+    averageFloorHeight: {
+      set(averageFloorHeight) {
+        this.UPDATE_AVERAGE_FLOOR_HEIGHT(averageFloorHeight);
+        this.UPDATE_IS_BUILDING_VOLUME_INVALID(this.$v.$invalid);
+      },
+
+      get() {
+        return this.getAverageFloorHeightValue;
+      },
     },
 
     floorAreaErrors() {
@@ -50,9 +62,9 @@ export default {
       return errors;
     },
 
-    floorHeightErrors() {
+    averageFloorHeightErrors() {
       const errors = [];
-      if (this.$v.floorHeight.$error) {
+      if (this.$v.averageFloorHeight.$error) {
         errors.push('Please provide a floor height (minimum 2.5 m.)');
       }
       return errors;
@@ -65,19 +77,13 @@ export default {
       minValue: minValue(10000),
     },
       
-    floorHeight: { 
+    averageFloorHeight: { 
       required, 
       minValue: minValue(2.5), 
     },
   },
 
   watch: {
-    buildingVolumeValue: function (newBuildingVolumeValue) {
-      this.UPDATE_BUILDING_VOLUME_VALUE(newBuildingVolumeValue);
-
-      this.UPDATE_IS_BUILDING_VOLUME_INVALID(this.$v.$invalid);
-    },
-
     getAreVolumeInputsDirty: function (newAreVolumeInputsDirty) {
       if (newAreVolumeInputsDirty) {
         this.$v.$touch();
@@ -91,7 +97,8 @@ export default {
   
   methods: {
     ...mapMutations([
-      'UPDATE_BUILDING_VOLUME_VALUE',
+      'UPDATE_FLOOR_AREA',
+      'UPDATE_AVERAGE_FLOOR_HEIGHT',
       'UPDATE_IS_BUILDING_VOLUME_INVALID',
     ]),
   },

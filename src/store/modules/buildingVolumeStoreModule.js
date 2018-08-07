@@ -1,7 +1,11 @@
 
 const mutations = {
-  UPDATE_BUILDING_VOLUME_VALUE: (state, payload) => {
-    state.buildingVolumeValue = payload;
+  UPDATE_FLOOR_AREA: (state, payload) => {
+    state.floorArea.areaValue = payload;
+  },
+
+  UPDATE_AVERAGE_FLOOR_HEIGHT: (state, payload) => {
+    state.averageFloorHeight.heightValue = payload;
   },
 
   UPDATE_IS_BUILDING_VOLUME_INVALID: (state, payload) => {
@@ -14,9 +18,13 @@ const mutations = {
 };
   
 const getters = {
-  getBuildingVolumeValue: state => state.buildingVolumeValue,
+  getAverageFloorHeightValue: state => state.averageFloorHeight.heightValue,
 
-  getBuildingVolumeUnit: state => state.buildingVolumeUnit,
+  getAverageFloorHeightUnit: state => state.averageFloorHeight.heightUnit,
+
+  getFloorAreaValue: state => state.floorArea.areaValue,
+
+  getFloorAreaUnit: state => state.floorArea.areaUnit,
 
   getIsBuildingVolumeInvalid: state => state.isBuildingVolumeInvalid,
 
@@ -24,8 +32,16 @@ const getters = {
 };
   
 const state = {
-  buildingVolumeValue: '',
-  buildingVolumeUnit: 'Cubic foot',
+  floorArea: {
+    areaValue: '',
+    areaUnit: 'sq_m',
+  },
+
+  averageFloorHeight: {
+    heightValue: '',
+    heightUnit: 'm',
+  },
+
   isBuildingVolumeInvalid: '',
   areVolumeInputsDirty: '',
 };  

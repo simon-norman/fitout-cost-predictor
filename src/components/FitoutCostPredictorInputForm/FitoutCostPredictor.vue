@@ -75,8 +75,10 @@ export default {
 
   computed: {
     ...mapGetters([
-      'getBuildingVolumeValue',
-      'getBuildingVolumeUnit',
+      'getFloorAreaValue',
+      'getFloorAreaUnit',
+      'getAverageFloorHeightValue',
+      'getAverageFloorHeightUnit',
       'getIsBuildingVolumeInvalid',
       'getFitoutCategory',
       'getIsFitoutCategoryInvalid',
@@ -145,9 +147,13 @@ export default {
 
     getCostPrediction() {
       return fitoutCostPredictorApi.getFitoutCostPrediction({
-        buildingVolume: {
-          buildingVolumeValue: this.getBuildingVolumeValue,
-          buildingVolumeUnit: this.getBuildingVolumeUnit,
+        floorArea: {
+          areaValue: this.getFloorAreaValue,
+          areaUnit: this.getFloorAreaUnit,
+        },
+        averageFloorHeight: {
+          heightValue: this.getAverageFloorHeightValue,
+          heightUnit: this.getAverageFloorHeightUnit,
         },
         isCatAIncluded: this.getFitoutCategory.isCatAIncluded,
         isCatBIncluded: this.getFitoutCategory.isCatBIncluded,

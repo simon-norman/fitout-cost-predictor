@@ -1,5 +1,5 @@
 
-import { store } from './../store/store';
+import { store } from './../../../store/store';
 
 const genericErrorMessage = 'So sorry, there\'s been an error - please try again later';
 

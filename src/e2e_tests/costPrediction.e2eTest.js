@@ -8,7 +8,7 @@ module.exports = {
       .pause(2000);
 
     browser.setValue('#floorAreaInput', 10000);
-    browser.setValue('#floorHeightInput', 4);
+    browser.setValue('#averageFloorHeightInput', 4);
 
     browser.execute("document.querySelector('.isCatAAndBIncludedInput .v-input--selection-controls__ripple').click()");
     browser.execute("document.querySelector('.sector-dropdown-list .v-list__tile__title').click()");

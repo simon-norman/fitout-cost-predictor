@@ -15,15 +15,15 @@ describe('BuildingVolume.vue', () => {
 
   const populateFloorSizeInputs = () => {
     wrapper.find('#floorAreaInput').setValue(costPredictionFloorInputs.floorArea);
-    wrapper.find('#floorHeightInput').setValue(costPredictionFloorInputs.floorHeight);
+    wrapper.find('#averageFloorHeightInput').setValue(costPredictionFloorInputs.averageFloorHeight);
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
     
     costPredictionFloorInputs = {
-      floorArea: '10000',
-      floorHeight: '2.5',
+      floorArea: 10000,
+      averageFloorHeight: 2.5,
     };
 
     vueTestWrapperElements = {
@@ -43,15 +43,25 @@ describe('BuildingVolume.vue', () => {
     });
   });
 
-  describe('Update Vuex store with building volume', () => {
-    it('should update the Vuex store with the building volume', async () => {
+  describe('Update Vuex store with building dimensions', () => {
+    it('should update the Vuex store with the floor area', async () => {
       populateFloorSizeInputs();
 
       const indexOfFinalCallToUpdateVolume = buildingVolumeStoreModule.mutations
-        .UPDATE_BUILDING_VOLUME_VALUE.mock.calls.length - 1;
+        .UPDATE_FLOOR_AREA.mock.calls.length - 1;
 
       expect(buildingVolumeStoreModule.mutations
-        .UPDATE_BUILDING_VOLUME_VALUE.mock.calls[indexOfFinalCallToUpdateVolume][1]).toBe(25000);
+        .UPDATE_FLOOR_AREA.mock.calls[indexOfFinalCallToUpdateVolume][1]).toBe('10000');
+    });
+
+    it('should update the Vuex store with the average floor height', async () => {
+      populateFloorSizeInputs();
+
+      const indexOfFinalCallToUpdateVolume = buildingVolumeStoreModule.mutations
+        .UPDATE_AVERAGE_FLOOR_HEIGHT.mock.calls.length - 1;
+
+      expect(buildingVolumeStoreModule.mutations
+        .UPDATE_AVERAGE_FLOOR_HEIGHT.mock.calls[indexOfFinalCallToUpdateVolume][1]).toBe('2.5');
     });
   });
 
@@ -67,11 +77,13 @@ describe('BuildingVolume.vue', () => {
     }; 
 
     it('should set the building volume as invalid', async () => {
-      expect(buildingVolumeStoreModule.mutations
-        .UPDATE_IS_BUILDING_VOLUME_INVALID.mock.calls[0][1]).toBe(true);
+      buildingVolumeStoreModule.getters.getFloorAreaValue = 
+        () => (9999.99999);
 
-      costPredictionFloorInputs.floorArea = 9999.9999;
-      costPredictionFloorInputs.floorHeight = 2.49;
+      buildingVolumeStoreModule.getters.getAverageFloorHeightValue = 
+        () => (2.49999999);
+
+      wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
   
       populateFloorSizeInputs();
       
@@ -79,6 +91,14 @@ describe('BuildingVolume.vue', () => {
     });
 
     it('should set the building volume as valid', async () => {
+      buildingVolumeStoreModule.getters.getFloorAreaValue = 
+        jest.fn(() => (costPredictionFloorInputs.floorArea));
+
+      buildingVolumeStoreModule.getters.getAverageFloorHeightValue = 
+        jest.fn(() => (costPredictionFloorInputs.averageFloorHeight));
+
+      wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
+      
       populateFloorSizeInputs();
       
       expect(getFinalCallMadeToUpdateVolumeValidStatus()[1]).toBe(false);
@@ -86,12 +106,12 @@ describe('BuildingVolume.vue', () => {
 
     it('should display invalid floor area and floor height error message if inputs set to dirty', async () => {
       expect(wrapper.vm.$v.floorArea.$error).toBeFalse();
-      expect(wrapper.vm.$v.floorHeight.$error).toBeFalse();
+      expect(wrapper.vm.$v.averageFloorHeight.$error).toBeFalse();
 
       wrapper.vm.$options.watch.getAreVolumeInputsDirty.call(wrapper.vm, true); 
 
       expect(wrapper.vm.$v.floorArea.$error).toBeTrue();
-      expect(wrapper.vm.$v.floorHeight.$error).toBeTrue();
+      expect(wrapper.vm.$v.averageFloorHeight.$error).toBeTrue();
     });
   });
 });

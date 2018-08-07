@@ -20,8 +20,10 @@ describe('FitoutCostPredictor.vue', () => {
 
   const stubbedVuexGetters = {
     getSectors: () => stubbedSectors,
-    getBuildingVolumeValue: () => 100000,
-    getBuildingVolumeUnit: () => 'Square foot',
+    getFloorAreaValue: () => 100000,
+    getFloorAreaUnit: () => 'sq_m',
+    getAverageFloorHeightValue: () => 3,
+    getAverageFloorHeightUnit: () => 'm',
     getIsBuildingVolumeInvalid: () => false,
     getFitoutCategory: () => ({ isCatAIncluded: true, isCatBIncluded: false }),
   };
@@ -61,10 +63,16 @@ describe('FitoutCostPredictor.vue', () => {
 
   beforeEach(() => {
     costPredictionParametersExpectedToBePassedToApi = {
-      buildingVolume: {
-        buildingVolumeValue: stubbedVuexGetters.getBuildingVolumeValue(),
-        buildingVolumeUnit: stubbedVuexGetters.getBuildingVolumeUnit(),
+      floorArea: {
+        areaValue: stubbedVuexGetters.getFloorAreaValue(),
+        areaUnit: stubbedVuexGetters.getFloorAreaUnit(),
       },
+
+      averageFloorHeight: {
+        heightValue: stubbedVuexGetters.getAverageFloorHeightValue(),
+        heightUnit: stubbedVuexGetters.getAverageFloorHeightUnit(),
+      },
+      
       isCatAIncluded: stubbedVuexGetters.getFitoutCategory().isCatAIncluded,
       isCatBIncluded: stubbedVuexGetters.getFitoutCategory().isCatBIncluded,
     };
