@@ -8,8 +8,8 @@ import alerts from './../../../store/modules/alerts';
 
 jest.mock('./../../../store/modules/alerts');
 jest.mock('../../../store/modules/fitoutCostPredictorStoreModule');
-
 jest.mock('axios');
+
 Vue.config.silent = true;
 
 describe('FitoutCostPredictor.vue', () => {
@@ -19,10 +19,7 @@ describe('FitoutCostPredictor.vue', () => {
   let costPredictionParametersExpectedToBePassedToApi;
   let vueTestWrapperElements;
 
-  const stubbedSectors = ['Financial Services', 'Retail'];
-
   const stubbedVuexGetters = {
-    getSectors: () => stubbedSectors,
     getFloorAreaValue: () => 100000,
     getFloorAreaUnit: () => 'sq_m',
     getAverageFloorHeightValue: () => 3,
@@ -30,25 +27,6 @@ describe('FitoutCostPredictor.vue', () => {
     getIsBuildingVolumeInvalid: () => false,
     getFitoutCategory: () => ({ isCatAIncluded: true, isCatBIncluded: false }),
     getIsFitoutCategoryInvalid: () => false,
-  };
-
-  const populateSectorInput = () => {
-    const firstOptionInSectorDropdownList = wrapper.find('.sector-dropdown-list .v-list__tile__title');
-    firstOptionInSectorDropdownList.trigger('click');
-  };
-
-  const getSelectedSector = () => {
-    const firstOptionInSectorDropdownList = wrapper.find('.sector-dropdown-list .v-list__tile__title');
-    return firstOptionInSectorDropdownList.text();
-  };
-
-  const getSectorsDisplayedToUser = () => {
-    const sectorsDisplayedToUser = [];
-    const sectorListElements = wrapper.findAll('.sector-dropdown-list .v-list__tile__title').wrappers;
-    for (const sectorListElement of sectorListElements) {
-      sectorsDisplayedToUser.push(sectorListElement.text());
-    }
-    return sectorsDisplayedToUser;
   };
 
   const calculateCostPrediction = async () => {
@@ -102,28 +80,15 @@ describe('FitoutCostPredictor.vue', () => {
     });
   });
 
-  describe('Available input options in prediction form', () => {
-    it('should display the sectors available to select', () => {
-      const sectorsDisplayedToUser = getSectorsDisplayedToUser();
-  
-      expect(sectorsDisplayedToUser).toEqual(stubbedSectors);
-    });
-  });
-
   describe('Predict cost', () => {
     it('should call the cost predictor API with the data (e.g. building volume) needed to make prediction', async () => {
-      populateSectorInput();
-
       await calculateCostPrediction();
 
-      costPredictionParametersExpectedToBePassedToApi.sector = getSelectedSector();
       expect(mockAxios.post.mock.calls[0][1])
         .toEqual(costPredictionParametersExpectedToBePassedToApi);
     });
 
     it('should display the predicted cost returned by the API, correctly formatted in £m', async () => {
-      populateSectorInput();
-
       await calculateCostPrediction();
       
       const costToTwoDecimals = Number.parseFloat(calculatedCostPrediction.cost).toFixed(2);
@@ -132,7 +97,6 @@ describe('FitoutCostPredictor.vue', () => {
     });
 
     it('should display the predicted cost in £k if it is less than 1 million', async () => {
-      populateSectorInput();
       calculatedCostPrediction.cost = 0.99497789798713598718310930;
 
       await calculateCostPrediction();
@@ -145,13 +109,6 @@ describe('FitoutCostPredictor.vue', () => {
   });
 
   describe('Prediction parameters form validation', () => {    
-    it('should display error message and not call api if sector is not selected', async () => {
-      await calculateCostPrediction();
-      
-      expect(mockAxios.post).not.toHaveBeenCalled();
-      expect(wrapper.vm.$v.fitoutCostPredictionInputs.selectedSector.$error).toBeTrue();
-    });
-
     it('should set prediction form dirty status to true when user selects to calculate cost', async () => {
       await calculateCostPrediction();
       
@@ -160,8 +117,6 @@ describe('FitoutCostPredictor.vue', () => {
     });
 
     it('should set prediction form dirty status to false when cost calculated successfully', async () => {
-      populateSectorInput();
-
       await calculateCostPrediction();
       
       expect(fitoutCostPredictorStoreModule
@@ -173,8 +128,7 @@ describe('FitoutCostPredictor.vue', () => {
     it('should activate alert if error from calling api, by updating vuex store', async () => {
       mockAxios.post.mockImplementation(() => Promise.reject(new Error('error')));
       wrapper = shallowComponentWrapperFactory.createWrapper(vueTestWrapperElements);
-      populateSectorInput();
-  
+
       await calculateCostPrediction();
 
       expect(alerts.mutations.UPDATE_ERROR_STATUS.mock.calls[0][1]).toEqual(true);
@@ -183,7 +137,6 @@ describe('FitoutCostPredictor.vue', () => {
 
     it('should throw error and activate alert if api returns an invalid cost value', async () => {
       calculatedCostPrediction.cost = 'invalid data - not a number';
-      populateSectorInput();
   
       await calculateCostPrediction();
 
@@ -193,7 +146,6 @@ describe('FitoutCostPredictor.vue', () => {
 
     it('should throw error if api returns cost value less than 10k', async () => {
       calculatedCostPrediction.cost = '0.00999';
-      populateSectorInput();
   
       await calculateCostPrediction();
 

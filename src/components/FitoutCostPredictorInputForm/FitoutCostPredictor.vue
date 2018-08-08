@@ -20,14 +20,6 @@
           <div class="form">
             <building-volume/>
             <fitout-category/>
-            <v-select
-              id="sectorSelector"
-              :items="getSectors"
-              v-model="fitoutCostPredictionInputs.selectedSector"
-              :error-messages="sectorErrors"
-              content-class="sector-dropdown-list"
-              label="Sector"
-            />
           </div>
           <v-btn 
             id="calculateCostPrediction"
@@ -45,7 +37,6 @@
 
 <script>
 import { mapMutations, mapGetters } from 'vuex';
-import { required } from 'vuelidate/lib/validators';
 import FitoutCostPredictorApi from '../../services/api/fitoutCostPredictorApi';
 import { handleError } from '../../services/error_handling/error_handler/errorHandler';
 import ErrorWithCustomMsgToUser from '../../services/error_handling/errors/errorWithCustomMsgToUser';
@@ -67,9 +58,6 @@ export default {
       fitoutCostPrediction: {
         cost: '',
       },
-      fitoutCostPredictionInputs: {
-        selectedSector: '',
-      },
     };    
   },
 
@@ -82,24 +70,7 @@ export default {
       'getIsBuildingVolumeInvalid',
       'getFitoutCategory',
       'getIsFitoutCategoryInvalid',
-      'getSectors',
     ]),
-
-    sectorErrors() {
-      const errors = [];
-      if (this.$v.fitoutCostPredictionInputs.selectedSector.$error) {
-        errors.push('Please select a sector');
-      }
-      return errors;
-    },
-  },
-
-  validations: {
-    fitoutCostPredictionInputs: {
-      selectedSector: { 
-        required, 
-      },
-    },
   },
   
   methods: {
@@ -121,13 +92,11 @@ export default {
     },
 
     setPredictionFormToDirty() {
-      this.$v.$touch();
       this.UPDATE_FITOUT_COST_INPUTS_DIRTY(true);
     },
 
     arePredictionParametersValid() {
-      if (!this.$v.$invalid && 
-        !this.getIsBuildingVolumeInvalid && 
+      if (!this.getIsBuildingVolumeInvalid && 
         !this.getIsFitoutCategoryInvalid) {
         return true;
       }
@@ -135,7 +104,6 @@ export default {
     },
 
     setPredictionFormToClean() {
-      this.$v.$reset();
       this.UPDATE_FITOUT_COST_INPUTS_DIRTY(false);
     },
 
@@ -151,7 +119,6 @@ export default {
         },
         isCatAIncluded: this.getFitoutCategory.isCatAIncluded,
         isCatBIncluded: this.getFitoutCategory.isCatBIncluded,
-        sector: this.fitoutCostPredictionInputs.selectedSector,
       }).then((resp) => resp.data.cost);
     },
 
