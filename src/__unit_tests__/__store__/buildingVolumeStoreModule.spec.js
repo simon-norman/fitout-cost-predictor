@@ -35,11 +35,6 @@ describe('buildingVolume.js', () => {
   });
 
   describe('Getters returning expected data', () => {
-    it('should return if building volume form is dirty', () => {
-      store.state.storeModule.areVolumeInputsDirty = true;
-      expect(store.getters.getAreVolumeInputsDirty).toBe(true); 
-    });
-
     it('should return building area unit', () => {
       store.state.storeModule.floorArea.areaUnit = 'sq_ft';
       expect(store.getters.getFloorAreaUnit).toBe('sq_ft'); 

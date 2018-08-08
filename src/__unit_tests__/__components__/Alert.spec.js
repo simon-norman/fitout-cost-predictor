@@ -26,6 +26,10 @@ describe('Alert.vue', () => {
   let componentWrapperFactory;
   let wrapper;
 
+  beforeAll(() => {
+    componentWrapperFactory = new ComponentWrapperFactory();
+  });
+
   beforeEach(() => {
     vueTestWrapperElements = {
       componentToTest: Alert,
@@ -34,14 +38,11 @@ describe('Alert.vue', () => {
         stubbedVuexMutations: createStubbedVuexMutations(), 
       },
     };
-
-    componentWrapperFactory = new ComponentWrapperFactory();
-
-    wrapper = componentWrapperFactory.createWrapper(vueTestWrapperElements);
   });
 
   describe('Display alert', () => {
     it('should display error alert', async () => {
+      wrapper = componentWrapperFactory.createWrapper(vueTestWrapperElements);
       await wrapper.vm.$nextTick();
 
       expect(wrapper.find('#errorAlert').element.style.display).toBe('');
@@ -49,6 +50,7 @@ describe('Alert.vue', () => {
 
     it('should not display error alert', async () => {
       vueTestWrapperElements.vuexStoreStubs.stubbedVuexGetters.getErrorStatus = () => false;
+      wrapper = componentWrapperFactory.createWrapper(vueTestWrapperElements);
       await wrapper.vm.$nextTick();
       expect(wrapper.find('#errorAlert').element.style.display).toBe('none');
     });

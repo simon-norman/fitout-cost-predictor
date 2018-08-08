@@ -39,12 +39,6 @@ describe('fitoutCategoryStoreModule.js', () => {
       expect(store.state.storeModule.fitoutCategory.isCatBIncluded).toBe(true);
     });
 
-    it('should update if fitout category form is dirty', () => {
-      store.commit('UPDATE_FITOUT_CATEGORY_INPUTS_DIRTY', true);    
-
-      expect(store.state.storeModule.areFitoutCategoryInputsDirty).toBe(true);
-    });
-
     it('should update if fitout category is valid', () => {
       expect(store.state.storeModule.isFitoutCategoryInvalid).toBe('');
       store.commit('UPDATE_IS_FITOUT_CATEGORY_INVALID', true);    
@@ -53,11 +47,6 @@ describe('fitoutCategoryStoreModule.js', () => {
   });
 
   describe('Getters returning expected data', () => {
-    it('should return if fitout category form is dirty', () => {
-      store.state.storeModule.areFitoutCategoryInputsDirty = true;
-      expect(store.getters.getAreFitoutCategoryInputsDirty).toBe(true); 
-    });
-
     it('should return fitout category', () => {
       store.state.storeModule.fitoutCategory.isCatAIncluded = true;
       store.state.storeModule.fitoutCategory.isCatBIncluded = false;
