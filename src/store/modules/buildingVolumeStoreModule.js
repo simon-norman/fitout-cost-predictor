@@ -34,7 +34,7 @@ const getters = {
 const state = {
   floorArea: {
     areaValue: '',
-    areaUnit: 'sq_m',
+    areaUnit: 'sq_ft',
   },
 
   averageFloorHeight: {
