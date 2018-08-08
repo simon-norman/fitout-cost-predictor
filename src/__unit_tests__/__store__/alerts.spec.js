@@ -20,7 +20,7 @@ describe('alerts.js', () => {
     store = createStandaloneVuexStore(storeElements);
   });
 
-  describe('Mutations updating correctly', () => {
+  describe('Mutations updating and getting correctly', () => {
     it('should update alert status', () => {
       expect(store.state.storeModule.errorStatus).toBe(false);
       store.commit('UPDATE_ERROR_STATUS', true);    
