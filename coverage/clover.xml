@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1533740117719" clover="3.2.0">
-  <project timestamp="1533740117720" name="All files">
-    <metrics statements="602" coveredstatements="50" conditionals="7977" coveredconditionals="21" methods="2704" coveredmethods="15" elements="11283" coveredelements="86" complexity="0" loc="602" ncloc="602" packages="17" files="47" classes="47">
+<coverage generated="1533740223412" clover="3.2.0">
+  <project timestamp="1533740223413" name="All files">
+    <metrics statements="602" coveredstatements="54" conditionals="7977" coveredconditionals="27" methods="2704" coveredmethods="16" elements="11283" coveredelements="97" complexity="0" loc="602" ncloc="602" packages="17" files="47" classes="47">
       <package name="frontend-cost-predictor">
         <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <file name=".eslintrc.js" path="c:\frontend-cost-predictor\.eslintrc.js">
@@ -430,12 +430,12 @@
         <file name="ComponentWrapperFactory.js" path="c:\frontend-cost-predictor\src\__unit_tests__\__helpers__\ComponentWrapperFactory.js">
           <metrics statements="13" coveredstatements="7" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="2"/>
           <line num="7" count="1" type="stmt"/>
-          <line num="11" count="2" type="stmt"/>
-          <line num="13" count="2" type="stmt"/>
-          <line num="23" count="2" type="stmt"/>
-          <line num="24" count="2" type="stmt"/>
-          <line num="25" count="2" type="stmt"/>
-          <line num="26" count="2" type="stmt"/>
+          <line num="11" count="10" type="stmt"/>
+          <line num="13" count="10" type="stmt"/>
+          <line num="23" count="10" type="stmt"/>
+          <line num="24" count="10" type="stmt"/>
+          <line num="25" count="10" type="stmt"/>
+          <line num="26" count="10" type="stmt"/>
           <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
           <line num="31" count="0" type="stmt"/>
           <line num="34" count="0" type="stmt"/>
@@ -445,12 +445,12 @@
         </file>
         <file name="ShallowComponentWrapperFactory.js" path="c:\frontend-cost-predictor\src\__unit_tests__\__helpers__\ShallowComponentWrapperFactory.js">
           <metrics statements="6" coveredstatements="5" conditionals="4" coveredconditionals="2" methods="1" coveredmethods="1"/>
-          <line num="7" count="2" type="cond" truecount="1" falsecount="1"/>
-          <line num="8" count="2" type="stmt"/>
-          <line num="11" count="2" type="stmt"/>
-          <line num="16" count="2" type="cond" truecount="1" falsecount="1"/>
+          <line num="7" count="10" type="cond" truecount="1" falsecount="1"/>
+          <line num="8" count="10" type="stmt"/>
+          <line num="11" count="10" type="stmt"/>
+          <line num="16" count="10" type="cond" truecount="1" falsecount="1"/>
           <line num="17" count="0" type="stmt"/>
-          <line num="20" count="2" type="stmt"/>
+          <line num="20" count="10" type="stmt"/>
         </file>
         <file name="standaloneVuexStoreFactory.js" path="c:\frontend-cost-predictor\src\__unit_tests__\__helpers__\standaloneVuexStoreFactory.js">
           <metrics statements="10" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -469,8 +469,8 @@
           <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
           <line num="4" count="1" type="stmt"/>
           <line num="6" count="1" type="stmt"/>
-          <line num="7" count="2" type="stmt"/>
-          <line num="13" count="2" type="stmt"/>
+          <line num="7" count="10" type="stmt"/>
+          <line num="13" count="10" type="stmt"/>
           <line num="16" count="1" type="stmt"/>
         </file>
       </package>
@@ -500,7 +500,7 @@
         </file>
       </package>
       <package name="frontend-cost-predictor.src.components.FitoutCostPredictorInputForm">
-        <metrics statements="128" coveredstatements="26" conditionals="77" coveredconditionals="19" methods="43" coveredmethods="10"/>
+        <metrics statements="128" coveredstatements="30" conditionals="77" coveredconditionals="25" methods="43" coveredmethods="11"/>
         <file name="BuildingVolume.vue" path="c:\frontend-cost-predictor\src\components\FitoutCostPredictorInputForm\BuildingVolume.vue">
           <metrics statements="28" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="13" coveredmethods="0"/>
           <line num="1" count="0" type="stmt"/>
@@ -533,7 +533,7 @@
           <line num="110" count="0" type="stmt"/>
         </file>
         <file name="FitoutCategory.vue" path="c:\frontend-cost-predictor\src\components\FitoutCostPredictorInputForm\FitoutCategory.vue">
-          <metrics statements="30" coveredstatements="26" conditionals="30" coveredconditionals="19" methods="13" coveredmethods="10"/>
+          <metrics statements="30" coveredstatements="30" conditionals="30" coveredconditionals="25" methods="13" coveredmethods="11"/>
           <line num="1" count="1" type="stmt"/>
           <line num="4" count="1" type="stmt"/>
           <line num="8" count="1" type="stmt"/>
@@ -541,28 +541,28 @@
           <line num="12" count="1" type="stmt"/>
           <line num="14" count="1" type="cond" truecount="3" falsecount="1"/>
           <line num="16" count="1" type="stmt"/>
-          <line num="21" count="2" type="stmt"/>
-          <line num="23" count="2" type="cond" truecount="2" falsecount="2"/>
-          <line num="24" count="0" type="stmt"/>
-          <line num="25" count="2" type="cond" truecount="3" falsecount="1"/>
-          <line num="26" count="0" type="stmt"/>
-          <line num="27" count="2" type="cond" truecount="2" falsecount="2"/>
-          <line num="28" count="0" type="stmt"/>
-          <line num="31" count="2" type="stmt"/>
-          <line num="37" count="2" type="stmt"/>
-          <line num="42" count="3" type="stmt"/>
-          <line num="43" count="3" type="cond" truecount="2" falsecount="0"/>
+          <line num="21" count="10" type="stmt"/>
+          <line num="23" count="10" type="cond" truecount="4" falsecount="0"/>
+          <line num="24" count="1" type="stmt"/>
+          <line num="25" count="9" type="cond" truecount="4" falsecount="0"/>
+          <line num="26" count="1" type="stmt"/>
+          <line num="27" count="8" type="cond" truecount="4" falsecount="0"/>
+          <line num="28" count="1" type="stmt"/>
+          <line num="31" count="10" type="stmt"/>
+          <line num="37" count="10" type="stmt"/>
+          <line num="42" count="14" type="stmt"/>
+          <line num="43" count="14" type="cond" truecount="2" falsecount="0"/>
           <line num="44" count="1" type="stmt"/>
-          <line num="46" count="3" type="stmt"/>
-          <line num="53" count="1" type="cond" truecount="3" falsecount="1"/>
+          <line num="46" count="14" type="stmt"/>
+          <line num="53" count="4" type="cond" truecount="4" falsecount="0"/>
           <line num="54" count="1" type="stmt"/>
-          <line num="56" count="0" type="stmt"/>
-          <line num="63" count="1" type="stmt"/>
-          <line num="67" count="1" type="cond" truecount="1" falsecount="1"/>
-          <line num="68" count="1" type="stmt"/>
-          <line num="74" count="2" type="stmt"/>
+          <line num="56" count="3" type="stmt"/>
+          <line num="63" count="4" type="stmt"/>
+          <line num="67" count="4" type="cond" truecount="1" falsecount="1"/>
+          <line num="68" count="4" type="stmt"/>
+          <line num="74" count="10" type="stmt"/>
           <line num="106" count="1" type="cond" truecount="2" falsecount="2"/>
-          <line num="107" count="3" type="cond" truecount="1" falsecount="1"/>
+          <line num="107" count="14" type="cond" truecount="1" falsecount="1"/>
           <line num="108" count="1" type="stmt"/>
         </file>
         <file name="FitoutCostPredictor.vue" path="c:\frontend-cost-predictor\src\components\FitoutCostPredictorInputForm\FitoutCostPredictor.vue">
@@ -792,7 +792,7 @@
           <line num="2" count="1" type="stmt"/>
           <line num="4" count="0" type="stmt"/>
           <line num="8" count="1" type="stmt"/>
-          <line num="9" count="2" type="stmt"/>
+          <line num="9" count="10" type="stmt"/>
           <line num="12" count="1" type="stmt"/>
         </file>
       </package>

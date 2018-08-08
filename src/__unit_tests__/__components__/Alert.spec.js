@@ -1,6 +1,6 @@
 
 import Vue from 'vue';
-import ComponentWrapperFactory from '../../__helpers__/ComponentWrapperFactory';
+import ComponentWrapperFactory from './../__helpers__/ComponentWrapperFactory';
 import Alert from '../../components/Alert.vue';
 
 jest.mock('axios');
