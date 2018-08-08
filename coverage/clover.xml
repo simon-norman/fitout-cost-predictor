@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1533740492834" clover="3.2.0">
-  <project timestamp="1533740492834" name="All files">
+<coverage generated="1533740722423" clover="3.2.0">
+  <project timestamp="1533740722423" name="All files">
     <metrics statements="575" coveredstatements="219" conditionals="7952" coveredconditionals="71" methods="2697" coveredmethods="77" elements="11224" coveredelements="367" complexity="0" loc="575" ncloc="575" packages="17" files="47" classes="47">
       <package name="frontend-cost-predictor">
         <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -430,12 +430,12 @@
         <file name="ComponentWrapperFactory.js" path="c:\frontend-cost-predictor\src\__unit_tests__\__helpers__\ComponentWrapperFactory.js">
           <metrics statements="13" coveredstatements="12" conditionals="4" coveredconditionals="2" methods="4" coveredmethods="4"/>
           <line num="7" count="4" type="stmt"/>
-          <line num="11" count="27" type="stmt"/>
-          <line num="13" count="27" type="stmt"/>
-          <line num="23" count="27" type="stmt"/>
-          <line num="24" count="27" type="stmt"/>
-          <line num="25" count="27" type="stmt"/>
-          <line num="26" count="27" type="stmt"/>
+          <line num="11" count="26" type="stmt"/>
+          <line num="13" count="26" type="stmt"/>
+          <line num="23" count="26" type="stmt"/>
+          <line num="24" count="26" type="stmt"/>
+          <line num="25" count="26" type="stmt"/>
+          <line num="26" count="26" type="stmt"/>
           <line num="30" count="10" type="cond" truecount="1" falsecount="1"/>
           <line num="31" count="10" type="stmt"/>
           <line num="34" count="10" type="stmt"/>
@@ -456,10 +456,10 @@
           <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
           <line num="5" count="4" type="stmt"/>
           <line num="7" count="4" type="stmt"/>
-          <line num="8" count="20" type="stmt"/>
-          <line num="9" count="20" type="stmt"/>
-          <line num="11" count="20" type="stmt"/>
-          <line num="16" count="20" type="stmt"/>
+          <line num="8" count="17" type="stmt"/>
+          <line num="9" count="17" type="stmt"/>
+          <line num="11" count="17" type="stmt"/>
+          <line num="16" count="17" type="stmt"/>
           <line num="19" count="4" type="stmt"/>
         </file>
         <file name="vuexStoreFactory.js" path="c:\frontend-cost-predictor\src\__unit_tests__\__helpers__\vuexStoreFactory.js">
