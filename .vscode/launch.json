@@ -101,6 +101,20 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Debug Store Fitout Cost Predictor Module Tests",
+            "program": "${workspaceRoot}\\node_modules\\jest\\bin\\jest.js",
+            "args": [
+                "-i",
+                "fitoutCostPredictorStoreModule.spec.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart",
+            "outFiles": [
+                "${workspaceRoot}/dist/**/*"
+            ],
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Debug Store Fitout Category Type Module Tests",
             "program": "${workspaceRoot}\\node_modules\\jest\\bin\\jest.js",
             "args": [

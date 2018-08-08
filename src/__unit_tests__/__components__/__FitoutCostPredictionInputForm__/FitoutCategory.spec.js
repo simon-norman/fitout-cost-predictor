@@ -3,6 +3,7 @@ import Vue from 'vue';
 import testUtilsWrapperFactory from '../../__helpers__/test_utils_wrapper_factory';
 import FitoutCategory from '../../../components/FitoutCostPredictorInputForm/FitoutCategory.vue';
 import fitoutCategoryStoreModule from '../../../store/modules/fitoutCategoryStoreModule';
+import fitoutCostPredictorStoreModule from '../../../store/modules/fitoutCostPredictorStoreModule';
 
 jest.mock('../../../store/modules/fitoutCategoryStoreModule');
 
@@ -11,6 +12,7 @@ Vue.config.silent = true;
 describe('FitoutCategory.vue', () => {
   let wrapper;
   let vueTestWrapperElements;
+  let stubbedVuexGetters;
 
   const populateCatABInputs = () => {
     wrapper.find('.isCatAAndBIncludedInput .v-input--selection-controls__ripple').trigger('click');
@@ -22,11 +24,14 @@ describe('FitoutCategory.vue', () => {
     fitoutCategoryStoreModule.getters.getFitoutCategory = 
       () => ({ isCatAIncluded: true, isCatBIncluded: true });
 
+    stubbedVuexGetters = 
+      Object.assign({}, fitoutCategoryStoreModule.getters, fitoutCostPredictorStoreModule.getters);
+
     vueTestWrapperElements = {
       componentToTest: FitoutCategory,
       vuexStoreStubs: {
         stubbedVuexMutations: fitoutCategoryStoreModule.mutations,
-        stubbedVuexGetters: fitoutCategoryStoreModule.getters,
+        stubbedVuexGetters,
       },
     };
 
@@ -49,11 +54,23 @@ describe('FitoutCategory.vue', () => {
   });
 
   describe('Validate fitout category input', () => {
-    it('should set the fitout category as invalid', async () => {
+    it('should set the fitout category as invalid if Cat A not included', async () => {
       jest.clearAllMocks();
 
-      fitoutCategoryStoreModule.getters.getFitoutCategory = 
-      () => ({ isCatAIncluded: false, isCatBIncluded: false });
+      stubbedVuexGetters.getFitoutCategory = 
+        () => ({ isCatAIncluded: false, isCatBIncluded: true });
+
+      wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
+
+      expect(fitoutCategoryStoreModule.mutations
+        .UPDATE_IS_FITOUT_CATEGORY_INVALID.mock.calls[0][1]).toBe(true);
+    });
+
+    it('should set the fitout category as invalid if Cat B not included', async () => {
+      jest.clearAllMocks();
+
+      stubbedVuexGetters.getFitoutCategory = 
+        () => ({ isCatAIncluded: true, isCatBIncluded: false });
 
       wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
 
@@ -71,7 +88,7 @@ describe('FitoutCategory.vue', () => {
     it('should display invalid floor area and floor height error message if inputs set to dirty', async () => {
       expect(wrapper.vm.$v.isEitherCatAOrBIncluded.$error).toBeFalse();
 
-      wrapper.vm.$options.watch.getAreFitoutCategoryInputsDirty.call(wrapper.vm, true); 
+      wrapper.vm.$options.watch.getAreFitoutCostInputsDirty.call(wrapper.vm, true); 
 
       expect(wrapper.vm.$v.isEitherCatAOrBIncluded.$error).toBeFalse();
     });

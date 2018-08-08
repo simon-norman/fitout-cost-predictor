@@ -104,11 +104,7 @@ export default {
   
   methods: {
     ...mapMutations([
-      'UPDATE_ERROR_MESSAGE',
-      'UPDATE_ERROR_STATUS',
-      'UPDATE_ERROR_STATUS',
-      'UPDATE_ARE_VOLUME_INPUTS_DIRTY',
-      'UPDATE_FITOUT_CATEGORY_INPUTS_DIRTY',
+      'UPDATE_FITOUT_COST_INPUTS_DIRTY',
     ]),
 
     async calculateCostPrediction() {
@@ -126,8 +122,7 @@ export default {
 
     setPredictionFormToDirty() {
       this.$v.$touch();
-      this.UPDATE_ARE_VOLUME_INPUTS_DIRTY(true);
-      this.UPDATE_FITOUT_CATEGORY_INPUTS_DIRTY(true);
+      this.UPDATE_FITOUT_COST_INPUTS_DIRTY(true);
     },
 
     arePredictionParametersValid() {
@@ -141,8 +136,7 @@ export default {
 
     setPredictionFormToClean() {
       this.$v.$reset();
-      this.UPDATE_ARE_VOLUME_INPUTS_DIRTY(false);
-      this.UPDATE_FITOUT_CATEGORY_INPUTS_DIRTY(false);
+      this.UPDATE_FITOUT_COST_INPUTS_DIRTY(false);
     },
 
     getCostPrediction() {

@@ -33,7 +33,7 @@ export default {
 
   computed: {
     ...mapGetters([
-      'getAreFitoutCategoryInputsDirty',
+      'getAreFitoutCostInputsDirty',
       'getFitoutCategory',
     ]),
 
@@ -90,8 +90,8 @@ export default {
       this.UPDATE_IS_FITOUT_CATEGORY_INVALID(this.$v.$invalid);
     },
 
-    getAreFitoutCategoryInputsDirty: function (newAreFitoutCategoryInputsDirty) {
-      if (newAreFitoutCategoryInputsDirty) {
+    getAreFitoutCostInputsDirty: function (newAreFitoutCostInputsDirty) {
+      if (newAreFitoutCostInputsDirty) {
         this.$v.$touch();
       }
     },

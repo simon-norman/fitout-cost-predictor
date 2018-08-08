@@ -1,8 +1,10 @@
 
 import Vue from 'vue';
 import testUtilsWrapperFactory from '../../__helpers__/test_utils_wrapper_factory';
+import ComponentWrapperFactory from '../../__helpers__/ComponentWrapperFactory';
 import BuildingVolume from '../../../components/FitoutCostPredictorInputForm/BuildingVolume.vue';
 import buildingVolumeStoreModule from '../../../store/modules/buildingVolumeStoreModule';
+import fitoutCostPredictorStoreModule from '../../../store/modules/fitoutCostPredictorStoreModule';
 
 jest.mock('../../../store/modules/buildingVolumeStoreModule');
 
@@ -10,8 +12,10 @@ Vue.config.silent = true;
 
 describe('BuildingVolume.vue', () => {
   let wrapper;
+  let componentWrapperFactory;
   let vueTestWrapperElements;
   let costPredictionFloorInputs;
+  let stubbedVuexGetters;
 
   const populateFloorSizeInputs = () => {
     wrapper.find('#floorAreaInput').setValue(costPredictionFloorInputs.floorArea);
@@ -26,15 +30,20 @@ describe('BuildingVolume.vue', () => {
       averageFloorHeight: 2.5,
     };
 
+    stubbedVuexGetters = 
+      Object.assign({}, buildingVolumeStoreModule.getters, fitoutCostPredictorStoreModule.getters);
+
     vueTestWrapperElements = {
       componentToTest: BuildingVolume,
       vuexStoreStubs: {
         stubbedVuexMutations: buildingVolumeStoreModule.mutations,
-        stubbedVuexGetters: buildingVolumeStoreModule.getters,
+        stubbedVuexGetters,
       },
     };
 
-    wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
+    componentWrapperFactory = new ComponentWrapperFactory();
+
+    wrapper = componentWrapperFactory.createWrapper(vueTestWrapperElements);
   });
 
   describe('Tests loading successfully', () => {
@@ -91,10 +100,10 @@ describe('BuildingVolume.vue', () => {
     });
 
     it('should set the building volume as valid', async () => {
-      buildingVolumeStoreModule.getters.getFloorAreaValue = 
+      stubbedVuexGetters.getFloorAreaValue = 
         jest.fn(() => (costPredictionFloorInputs.floorArea));
 
-      buildingVolumeStoreModule.getters.getAverageFloorHeightValue = 
+      stubbedVuexGetters.getAverageFloorHeightValue = 
         jest.fn(() => (costPredictionFloorInputs.averageFloorHeight));
 
       wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
@@ -108,7 +117,7 @@ describe('BuildingVolume.vue', () => {
       expect(wrapper.vm.$v.floorArea.$error).toBeFalse();
       expect(wrapper.vm.$v.averageFloorHeight.$error).toBeFalse();
 
-      wrapper.vm.$options.watch.getAreVolumeInputsDirty.call(wrapper.vm, true); 
+      wrapper.vm.$options.watch.getAreFitoutCostInputsDirty.call(wrapper.vm, true); 
 
       expect(wrapper.vm.$v.floorArea.$error).toBeTrue();
       expect(wrapper.vm.$v.averageFloorHeight.$error).toBeTrue();

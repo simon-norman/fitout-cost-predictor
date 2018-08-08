@@ -29,7 +29,7 @@ export default {
     ...mapGetters([
       'getFloorAreaValue',
       'getAverageFloorHeightValue',
-      'getAreVolumeInputsDirty',
+      'getAreFitoutCostInputsDirty',
     ]),
 
     floorArea: {
@@ -84,8 +84,8 @@ export default {
   },
 
   watch: {
-    getAreVolumeInputsDirty: function (newAreVolumeInputsDirty) {
-      if (newAreVolumeInputsDirty) {
+    getAreFitoutCostInputsDirty: function (newAreFitoutCostInputsDirty) {
+      if (newAreFitoutCostInputsDirty) {
         this.$v.$touch();
       }
     },
