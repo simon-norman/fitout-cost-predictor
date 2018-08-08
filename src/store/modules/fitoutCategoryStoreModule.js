@@ -18,16 +18,10 @@ const mutations = {
   UPDATE_IS_FITOUT_CATEGORY_INVALID: (state, payload) => {
     state.isFitoutCategoryInvalid = payload;
   },
-
-  UPDATE_FITOUT_CATEGORY_INPUTS_DIRTY: (state, payload) => {
-    state.areFitoutCategoryInputsDirty = payload;
-  },
 };
   
 const getters = {
   getFitoutCategory: state => state.fitoutCategory,
-
-  getAreFitoutCategoryInputsDirty: state => state.areFitoutCategoryInputsDirty,
 
   getIsFitoutCategoryInvalid: state => state.isFitoutCategoryInvalid,
 };
@@ -38,7 +32,6 @@ const state = {
     isCatBIncluded: '',
   },
   isFitoutCategoryInvalid: '',
-  areFitoutCategoryInputsDirty: '',
 };  
   
 export default {

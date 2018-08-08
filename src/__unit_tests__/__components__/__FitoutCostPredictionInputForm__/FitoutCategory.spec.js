@@ -1,9 +1,9 @@
 
 import Vue from 'vue';
-import testUtilsWrapperFactory from '../../__helpers__/test_utils_wrapper_factory';
 import FitoutCategory from '../../../components/FitoutCostPredictorInputForm/FitoutCategory.vue';
 import fitoutCategoryStoreModule from '../../../store/modules/fitoutCategoryStoreModule';
 import fitoutCostPredictorStoreModule from '../../../store/modules/fitoutCostPredictorStoreModule';
+import ShallowComponentWrapperFactory from '../../__helpers__/ShallowComponentWrapperFactory';
 
 jest.mock('../../../store/modules/fitoutCategoryStoreModule');
 
@@ -11,6 +11,7 @@ Vue.config.silent = true;
 
 describe('FitoutCategory.vue', () => {
   let wrapper;
+  let shallowComponentWrapperFactory;
   let vueTestWrapperElements;
   let stubbedVuexGetters;
 
@@ -18,15 +19,7 @@ describe('FitoutCategory.vue', () => {
     wrapper.find('.isCatAAndBIncludedInput .v-input--selection-controls__ripple').trigger('click');
   };
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    
-    fitoutCategoryStoreModule.getters.getFitoutCategory = 
-      () => ({ isCatAIncluded: true, isCatBIncluded: true });
-
-    stubbedVuexGetters = 
-      Object.assign({}, fitoutCategoryStoreModule.getters, fitoutCostPredictorStoreModule.getters);
-
+  const setVueTestWrapperElements = () => {  
     vueTestWrapperElements = {
       componentToTest: FitoutCategory,
       vuexStoreStubs: {
@@ -34,8 +27,27 @@ describe('FitoutCategory.vue', () => {
         stubbedVuexGetters,
       },
     };
+  };
 
-    wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
+  const createWrapper = () => {
+    shallowComponentWrapperFactory = new ShallowComponentWrapperFactory();
+    wrapper = shallowComponentWrapperFactory.createWrapper(vueTestWrapperElements);
+  };
+
+  const createWrapperWithFitoutCategoryStubbed = (fitoutCategory) => {
+    fitoutCategoryStoreModule.getters.getFitoutCategory = () => (fitoutCategory);
+    stubbedVuexGetters = 
+      Object.assign({}, fitoutCategoryStoreModule.getters, fitoutCostPredictorStoreModule.getters);
+
+    setVueTestWrapperElements();
+
+    createWrapper();
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    createWrapperWithFitoutCategoryStubbed({ isCatAIncluded: false, isCatBIncluded: false });
   });
 
   describe('Tests loading successfully', () => {
@@ -54,42 +66,48 @@ describe('FitoutCategory.vue', () => {
   });
 
   describe('Validate fitout category input', () => {
-    it('should set the fitout category as invalid if Cat A not included', async () => {
+    it('should set the fitout category as invalid and then display an error, when form is set to dirty, if NEITHER Cat A and B are included', async () => {      
       jest.clearAllMocks();
-
-      stubbedVuexGetters.getFitoutCategory = 
-        () => ({ isCatAIncluded: false, isCatBIncluded: true });
-
-      wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
-
-      expect(fitoutCategoryStoreModule.mutations
-        .UPDATE_IS_FITOUT_CATEGORY_INVALID.mock.calls[0][1]).toBe(true);
-    });
-
-    it('should set the fitout category as invalid if Cat B not included', async () => {
-      jest.clearAllMocks();
-
-      stubbedVuexGetters.getFitoutCategory = 
-        () => ({ isCatAIncluded: true, isCatBIncluded: false });
-
-      wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
-
-      expect(fitoutCategoryStoreModule.mutations
-        .UPDATE_IS_FITOUT_CATEGORY_INVALID.mock.calls[0][1]).toBe(true);
-    });
-
-    it('should set the fitout category as valid', async () => {
-      populateCatABInputs();
+      createWrapperWithFitoutCategoryStubbed({ isCatAIncluded: false, isCatBIncluded: false });
       
+      wrapper.vm.$options.watch.fitoutCategory.call(wrapper.vm);
       expect(fitoutCategoryStoreModule.mutations
-        .UPDATE_IS_FITOUT_CATEGORY_INVALID.mock.calls[0][1]).toBe(false);
+        .UPDATE_IS_FITOUT_CATEGORY_INVALID.mock.calls[1][1]).toBe(true);
+
+      wrapper.vm.$options.watch.getAreFitoutCostInputsDirty.call(wrapper.vm, true);  
+      expect(wrapper.vm.$v.isEitherCatAOrBIncluded.$error).toBeTrue();
     });
 
-    it('should display invalid floor area and floor height error message if inputs set to dirty', async () => {
+    it('should set the fitout category as valid and not display an error, when form is set to dirty, if Cat A included', async () => {
+      createWrapperWithFitoutCategoryStubbed({ isCatAIncluded: true, isCatBIncluded: false });
+
+      wrapper.vm.$options.watch.fitoutCategory.call(wrapper.vm);
+      expect(fitoutCategoryStoreModule.mutations
+        .UPDATE_IS_FITOUT_CATEGORY_INVALID.mock.calls[1][1]).toBe(false);
+
+      wrapper.vm.$options.watch.getAreFitoutCostInputsDirty.call(wrapper.vm, true);   
       expect(wrapper.vm.$v.isEitherCatAOrBIncluded.$error).toBeFalse();
+    });
+
+    it('should set the fitout category as valid and not display an error, when form is set to dirty, if Cat B included', async () => {
+      createWrapperWithFitoutCategoryStubbed({ isCatAIncluded: false, isCatBIncluded: true });
+
+      wrapper.vm.$options.watch.fitoutCategory.call(wrapper.vm);
+      expect(fitoutCategoryStoreModule.mutations
+        .UPDATE_IS_FITOUT_CATEGORY_INVALID.mock.calls[1][1]).toBe(false);
+
+      wrapper.vm.$options.watch.getAreFitoutCostInputsDirty.call(wrapper.vm, true);      
+      expect(wrapper.vm.$v.isEitherCatAOrBIncluded.$error).toBeFalse();
+    });
+
+    it('should set the fitout category as valid and not display an error, when form is set to dirty, if Cat A and B ARE BOTH included', async () => {
+      createWrapperWithFitoutCategoryStubbed({ isCatAIncluded: true, isCatBIncluded: true });
+
+      wrapper.vm.$options.watch.fitoutCategory.call(wrapper.vm);
+      expect(fitoutCategoryStoreModule.mutations
+        .UPDATE_IS_FITOUT_CATEGORY_INVALID.mock.calls[1][1]).toBe(false);
 
       wrapper.vm.$options.watch.getAreFitoutCostInputsDirty.call(wrapper.vm, true); 
-
       expect(wrapper.vm.$v.isEitherCatAOrBIncluded.$error).toBeFalse();
     });
   });

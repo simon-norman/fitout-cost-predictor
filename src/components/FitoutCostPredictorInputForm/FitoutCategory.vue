@@ -26,7 +26,6 @@
 
 <script>
 import { mapMutations, mapGetters } from 'vuex';
-import { required } from 'vuelidate/lib/validators';
 
 export default {
   name: 'FitoutCategory',
@@ -69,20 +68,15 @@ export default {
     },
   },
 
-  validations: {
-    isCatBIncluded: {
-      required(v) {
-        return this.fitoutCategory.isCatAIncluded || required(v);
+  validations: {      
+    isEitherCatAOrBIncluded: {
+      required() {
+        if (!this.fitoutCategory.isCatAIncluded && !this.fitoutCategory.isCatBIncluded) {
+          return false;
+        }
+        return true;
       },
     },
-
-    isCatAIncluded: {
-      required(v) {
-        return this.fitoutCategory.isCatBIncluded || required(v);
-      },
-    },
-      
-    isEitherCatAOrBIncluded: ['isCatAIncluded', 'isCatBIncluded'],
   },
 
   watch: {
@@ -98,7 +92,7 @@ export default {
   },
 
   created() {
-    this.UPDATE_IS_FITOUT_CATEGORY_INVALID(this.$v.$invalid);
+    this.UPDATE_IS_FITOUT_CATEGORY_INVALID(this.$v.isEitherCatAOrBIncluded.$error);
   },
 
   methods: {

@@ -1,6 +1,5 @@
 
 import Vue from 'vue';
-import testUtilsWrapperFactory from '../../__helpers__/test_utils_wrapper_factory';
 import ComponentWrapperFactory from '../../__helpers__/ComponentWrapperFactory';
 import BuildingVolume from '../../../components/FitoutCostPredictorInputForm/BuildingVolume.vue';
 import buildingVolumeStoreModule from '../../../store/modules/buildingVolumeStoreModule';
@@ -92,7 +91,7 @@ describe('BuildingVolume.vue', () => {
       buildingVolumeStoreModule.getters.getAverageFloorHeightValue = 
         () => (2.49999999);
 
-      wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
+      wrapper = componentWrapperFactory.createWrapper(vueTestWrapperElements);
   
       populateFloorSizeInputs();
       
@@ -106,7 +105,7 @@ describe('BuildingVolume.vue', () => {
       stubbedVuexGetters.getAverageFloorHeightValue = 
         jest.fn(() => (costPredictionFloorInputs.averageFloorHeight));
 
-      wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
+      wrapper = componentWrapperFactory.createWrapper(vueTestWrapperElements);
       
       populateFloorSizeInputs();
       

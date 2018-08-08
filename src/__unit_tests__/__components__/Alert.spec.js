@@ -1,6 +1,6 @@
 
 import Vue from 'vue';
-import testUtilsWrapperFactory from '../__helpers__/test_utils_wrapper_factory';
+import ComponentWrapperFactory from '../../__helpers__/ComponentWrapperFactory';
 import Alert from '../../components/Alert.vue';
 
 jest.mock('axios');
@@ -23,6 +23,8 @@ const createStubbedVuexGetters = () => {
 
 describe('Alert.vue', () => {
   let vueTestWrapperElements;
+  let componentWrapperFactory;
+  let wrapper;
 
   beforeEach(() => {
     vueTestWrapperElements = {
@@ -32,12 +34,14 @@ describe('Alert.vue', () => {
         stubbedVuexMutations: createStubbedVuexMutations(), 
       },
     };
+
+    componentWrapperFactory = new ComponentWrapperFactory();
+
+    wrapper = componentWrapperFactory.createWrapper(vueTestWrapperElements);
   });
 
   describe('Display alert', () => {
     it('should display error alert', async () => {
-      const wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
-
       await wrapper.vm.$nextTick();
 
       expect(wrapper.find('#errorAlert').element.style.display).toBe('');
@@ -45,8 +49,6 @@ describe('Alert.vue', () => {
 
     it('should not display error alert', async () => {
       vueTestWrapperElements.vuexStoreStubs.stubbedVuexGetters.getErrorStatus = () => false;
-      const wrapper = testUtilsWrapperFactory.createWrapper(vueTestWrapperElements);
-
       await wrapper.vm.$nextTick();
       expect(wrapper.find('#errorAlert').element.style.display).toBe('none');
     });
