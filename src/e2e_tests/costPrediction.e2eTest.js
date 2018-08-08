@@ -11,7 +11,6 @@ module.exports = {
     browser.setValue('#averageFloorHeightInput', 4);
 
     browser.execute("document.querySelector('.isCatAAndBIncludedInput .v-input--selection-controls__ripple').click()");
-    browser.execute("document.querySelector('.sector-dropdown-list .v-list__tile__title').click()");
     browser.click('#calculateCostPrediction');
     browser.pause(2000);
     browser.expect.element('#displayedCostPrediction').text.to.contain('£');
