@@ -8,23 +8,21 @@
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
     "unit-test": "jest",
+    "e2e-test": "nightwatch && nightwatch --env chrome",
     "build": "node build/build.js",
-    "deploy-testing": "npm run build testing && firebase deploy -P testing",
-    "deploy-production": "npm run build production && firebase deploy -P production",
-    "deploy-full": "npm run deploy-testing && npm run deploy-production",
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
     "axios": "^0.18.0",
     "firebase": "^5.2.0",
     "firebase-admin": "^1.2.0",
-    "firebase-tools": "^3.19.3",
     "firebase-functions": "^1.1.0",
+    "firebase-tools": "^3.19.3",
     "vue": "^2.5.2",
     "vue-analytics": "^5.12.2",
     "vue-router": "^3.0.1",
     "vuelidate": "^0.6.2",
-    "vuetify": "^1.1.2",
+    "vuetify": "^1.1.9",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -67,6 +65,7 @@
     "jest-extended": "^0.7.2",
     "jest-vue-preprocessor": "^1.4.0",
     "lodash": "^4.17.10",
+    "nightwatch": "^0.9.21",
     "opn": "^5.1.0",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.3.0",
@@ -93,6 +92,11 @@
     "npm": ">= 3.0.0"
   },
   "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.{js,vue}",
+      "!**/node_modules/**"
+    ],
     "moduleFileExtensions": [
       "js",
       "json",

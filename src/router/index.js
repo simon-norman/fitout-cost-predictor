@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import FitoutCostPredictor from '@/components/FitoutCostPredictor.vue';
+import FitoutCostPredictor from '@/components/FitoutCostPredictorInputForm/FitoutCostPredictor.vue';
 import Alert from '@/components/Alert.vue';
 import Header from '@/components/Header.vue';
 

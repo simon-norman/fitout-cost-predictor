@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="0"
+            tests="1">
+
+  <testsuite name="costPrediction.e2eTest"
+    errors="0" failures="0" hostname="" id="" package="costPrediction.e2eTest" skipped="0"
+    tests="1" time="14.46" timestamp="Wed, 18 Jul 2018 15:08:44 GMT">
+  
+    <testcase name="Calculated cost prediction displays" classname="costPrediction.e2eTest" time="14.46" assertions="2">
+
+    
+
+    
+    </testcase>
+  
+
+  
+
+  
+  </testsuite>
+</testsuites>
